@@ -7,6 +7,7 @@ sonar-project.properties
 extras/compose/*/.env
 extras/compose/*/app.toml
 extras/compose/postgres/password.txt
+extras/compose/keycloak/tls/key.pem
 notizen/
 src/config/resources/app.toml
 src/config/resources/tls/key.pem
