@@ -1,31 +1,65 @@
-.venv
-__pycache__/
-.pytest_cache
-.ruff_cache
-.scannerwork
-.vscode
-build/
-dist
-extras/**/__pycache__
-htmlcov
-log
-site
-src/nutzer/**/__pycache__
-tests/**/__pycache__
-.coverage
-report.html
-*.xlsx
-dependency-check-report.html
-alt/
-notizen/
-hien.md
-
-# Sensible Daten
+# Secrets und lokale Konfiguration
 .env
+.env.*
+!.env.example
 secret.txt
 sonar-project.properties
+extras/compose/*/.env
+extras/compose/*/app.toml
 extras/compose/postgres/password.txt
-extras/compose/nutzer/.env
-src/nutzer/config/resources/tls/key.pem
-src/nutzer/config/resources/app.toml
-extras/compose/nutzer/app.toml
+extras/compose/keycloak/tls/key.pem
+notizen/
+src/config/resources/app.toml
+src/config/resources/tls/key.pem
+
+# Bun, Node und Package-Manager
+node_modules/
+.bun/
+.bun-cache/
+
+# Logs
+log/
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+bun-debug.log*
+
+# Build, Coverage und generierte Dateien
+build/
+dist/
+coverage/
+src/generated/
+generated/
+*.tsbuildinfo
+
+# TypeScript-, Vite-, Vitest- und Linter-Caches
+.vite/
+.vitest/
+.eslintcache
+.prettier-cache/
+
+# Reports und Analyse-Ausgaben
+.scannerwork/
+dependency-check-report.*
+report.html
+
+# Lokale Datenbanken und Service-State
+*.db
+*.sqlite
+*.sqlite3
+postgres-data/
+pgdata/
+grafana.db
+
+# Abgabe-Organisation lokal
+*.xlsx
+
+# OS und Editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
