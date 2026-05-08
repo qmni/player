@@ -1,1 +1,23 @@
- 
+ generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "esm"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum PlayerStatus {
+  ACTIVE
+  BANNED
+  DELETED
+}
+
+enum PlayerClass {
+  WARRIOR
+  MAGE
+  ROGUE
+  PRIEST
+  HUNTER
+}
