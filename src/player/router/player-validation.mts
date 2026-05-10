@@ -13,3 +13,25 @@ const PlayerComplete = z.strictObject({
   status: z.enum(["ACTIVE", "BANNED", "DELETED"]).optional(),
   guildId: z.int().positive().optional(),
 });
+
+export const PlayerNewSchema = PlayerComplete.omit({
+  id: true,
+  version: true,
+}).readonly();
+
+export const PlayerUpdateSchema = PlayerComplete.omit({
+  id: true,
+  version: true,
+})
+  .partial()
+  .readonly();
+
+export const PlayerUpdateGraphQLSchema = PlayerComplete.partial()
+  .required({
+    id: true,
+    version: true,
+  })
+  .readonly();
+
+export type PlayerNewType = z.infer<typeof PlayerNewSchema>;
+export type PlayerUpdateType = z.infer<typeof PlayerUpdateSchema>;
