@@ -7,4 +7,9 @@ export type Pageable = {
   readonly size: number;
 };
 
+export type PageableProps = {
+  readonly number?: string | undefined;
+  readonly size?: string | undefined;
+};
+
 
