@@ -12,4 +12,20 @@ export type PageableProps = {
   readonly size?: string | undefined;
 };
 
+export const createPageable = ({ number, size }: PageableProps): Pageable => {
+  const parsedNumber = Number(number);
+  const pageNumber =
+    Number.isInteger(parsedNumber) && parsedNumber > 0
+      ? parsedNumber - 1
+      : DEFAULT_PAGE_NUMBER;
 
+  const parsedSize = Number(size);
+  const pageSize =
+    Number.isInteger(parsedSize) &&
+    parsedSize >= 1 &&
+    parsedSize <= MAX_PAGE_SIZE
+      ? parsedSize
+      : DEFAULT_PAGE_SIZE;
+
+  return { number: pageNumber, size: pageSize };
+};
