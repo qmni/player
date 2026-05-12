@@ -138,3 +138,16 @@ export class PlayerService {
         const totalElements = await this.count();
         return this.#createSlice(players, totalElements);
     }
+
+     #createSlice(
+        players: PlayerMitGuild[],
+        totalElements: number,
+    ): Readonly<Slice<PlayerMitGuild>> {
+        const playerSlice: Slice<PlayerMitGuild> = {
+            content: players,
+            totalElements,
+        };
+
+        this.#logger.debug('createSlice: playerSlice=%o', playerSlice);
+        return playerSlice;
+    }
