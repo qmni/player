@@ -118,3 +118,23 @@ export class PlayerService {
         this.#logger.debug('count: %d', anzahl);
         return anzahl;
     }
+
+     async #findAll(
+        pageable: Pageable,
+    ): Promise<Readonly<Slice<PlayerMitGuild>>> {
+        const { number, size } = pageable;
+
+        const players: PlayerMitGuild[] = await prismaClient.player.findMany({
+            skip: number * size,
+            take: size,
+            include: this.#includeGuild,
+        });
+
+        if (players.length === 0) {
+            this.#logger.debug('#findAll: Keine Player gefunden');
+            throw new NotFoundError(`Ungueltige Seite "${number}"`);
+        }
+
+        const totalElements = await this.count();
+        return this.#createSlice(players, totalElements);
+    }
