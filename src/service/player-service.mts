@@ -106,3 +106,15 @@ export class PlayerService {
         const totalElements = await this.count(where);
         return this.#createSlice(players, totalElements);
     }
+
+    async count(where?: Prisma.PlayerWhereInput) {
+        this.#logger.debug('count: where=%o', where ?? 'undefined');
+
+        const anzahl =
+            where === undefined
+                ? await prismaClient.player.count()
+                : await prismaClient.player.count({ where });
+
+        this.#logger.debug('count: %d', anzahl);
+        return anzahl;
+    }
