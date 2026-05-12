@@ -151,3 +151,21 @@ export class PlayerService {
         this.#logger.debug('createSlice: playerSlice=%o', playerSlice);
         return playerSlice;
     }
+
+     #checkKeys(keys: string[]) {
+        this.#logger.debug('#checkKeys: keys=%o', keys);
+
+        let validKeys = true;
+
+        keys.forEach((key) => {
+            if (!suchparameterNamen.includes(key)) {
+                this.#logger.debug(
+                    '#checkKeys: ungueltiger Suchparameter "%s"',
+                    key,
+                );
+                validKeys = false;
+            }
+        });
+
+        return validKeys;
+    }
