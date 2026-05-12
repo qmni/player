@@ -36,3 +36,57 @@ export const buildWhere = (suchparameter: Suchparameter) => {
                     mode: Prisma.QueryMode.insensitive,
                 };
                 break;
+
+            case 'email':
+                where.email = {
+                    contains: value as string,
+                    mode: Prisma.QueryMode.insensitive,
+                };
+                break;
+
+            case 'level': {
+                const levelNumber = Number.parseInt(value as string);
+                if (!Number.isNaN(levelNumber)) {
+                    where.level = { gte: levelNumber };
+                }
+                break;
+            }
+
+            case 'experience': {
+                const experienceNumber = Number.parseInt(value as string);
+                if (!Number.isNaN(experienceNumber)) {
+                    where.experience = { gte: experienceNumber };
+                }
+                break;
+            }
+
+            case 'playerClass':
+                where.playerClass = { equals: value as PlayerClass };
+                break;
+
+            case 'status':
+                where.status = { equals: value as PlayerStatus };
+                break;
+
+            case 'guildId': {
+                const guildIdNumber = Number.parseInt(value as string);
+                if (!Number.isNaN(guildIdNumber)) {
+                    where.guildId = { equals: guildIdNumber };
+                }
+                break;
+            }
+
+            case 'guild':
+                where.guild = {
+                    name: {
+                        contains: value as string,
+                        mode: Prisma.QueryMode.insensitive,
+                    },
+                };
+                break;
+        }
+    });
+
+    logger.debug('build: where=%o', where);
+    return where;
+};
