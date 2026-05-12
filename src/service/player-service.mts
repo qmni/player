@@ -61,3 +61,48 @@ export class PlayerService {
         this.#logger.debug('findById: player=%o', player);
         return player;
     }
+
+    async find(
+        suchparameter: Suchparameter | undefined,
+        pageable: Pageable,
+    ): Promise<Readonly<Slice<Readonly<PlayerMitGuild>>>> {
+        this.#logger.debug(
+            'find: suchparameter=%s, pageable=%o',
+            JSON.stringify(suchparameter),
+            pageable,
+        );
+
+        if (suchparameter === undefined) {
+            return await this.#findAll(pageable);
+        }
+
+        const keys = Object.keys(suchparameter);
+        if (keys.length === 0) {
+            return await this.#findAll(pageable);
+        }
+
+        if (!this.#checkKeys(keys) || !this.#checkEnums(suchparameter)) {
+            this.#logger.debug('Ungueltige Suchparameter');
+            throw new NotFoundError('Ungueltige Suchparameter');
+        }
+
+        const where = buildWhere(suchparameter);
+        const { number, size } = pageable;
+
+        const players: PlayerMitGuild[] = await prismaClient.player.findMany({
+            where,
+            skip: number * size,
+            take: size,
+            include: this.#includeGuild,
+        });
+
+        if (players.length === 0) {
+            this.#logger.debug('find: Keine Player gefunden');
+            throw new NotFoundError(
+                `Keine Player gefunden: ${JSON.stringify(suchparameter)}, Seite ${pageable.number}`,
+            );
+        }
+
+        const totalElements = await this.count(where);
+        return this.#createSlice(players, totalElements);
+    }
