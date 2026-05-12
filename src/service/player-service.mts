@@ -169,3 +169,30 @@ export class PlayerService {
 
         return validKeys;
     }
+
+     #checkEnums(suchparameter: Suchparameter) {
+        const { playerClass, status } = suchparameter;
+
+        this.#logger.debug(
+            '#checkEnums: playerClass=%s, status=%s',
+            playerClass,
+            status,
+        );
+
+        const validPlayerClass =
+            playerClass === undefined ||
+            playerClass === 'WARRIOR' ||
+            playerClass === 'MAGE' ||
+            playerClass === 'ROGUE' ||
+            playerClass === 'PRIEST' ||
+            playerClass === 'HUNTER';
+
+        const validStatus =
+            status === undefined ||
+            status === 'ACTIVE' ||
+            status === 'BANNED' ||
+            status === 'DELETED';
+
+        return validPlayerClass && validStatus;
+    }
+}
