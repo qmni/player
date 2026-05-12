@@ -39,3 +39,25 @@ export class PlayerService {
     };
 
     readonly #logger = getLogger(PlayerService.name);
+
+     async findById({
+        id,
+        mitGuild,
+    }: FindByIdParams): Promise<Readonly<PlayerOhneGuild | PlayerMitGuild>> {
+        this.#logger.debug('findById: id=%d', id);
+
+        const include = mitGuild ? this.#includeGuild : undefined;
+
+        const player = await prismaClient.player.findUnique({
+            where: { id },
+            include,
+        });
+
+        if (player === null) {
+            this.#logger.debug('Es gibt keinen Player mit der ID %d', id);
+            throw new NotFoundError(`Es gibt keinen Player mit der ID ${id}.`);
+        }
+
+        this.#logger.debug('findById: player=%o', player);
+        return player;
+    }
