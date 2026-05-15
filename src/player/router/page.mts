@@ -11,4 +11,20 @@ export type Page<T> = {
   };
 };
 
+export const createPage = <T,>(
+  slice: Slice<T>,
+  pageable: Pageable,
+): Page<T> => {
+  const { content, totalElements } = slice;
+  const { number, size } = pageable;
 
+  return {
+    content,
+    page: {
+      size,
+      number,
+      totalElements,
+      totalPages: Math.ceil(totalElements / size),
+    },
+  };
+};
