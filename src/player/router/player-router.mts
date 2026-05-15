@@ -18,4 +18,12 @@ export type PlayerResponse = {
   readonly version: number;
 };
 
+export type PlayerReadService = {
+  readonly count: () => Promise<number>;
+  readonly find: (
+    queryParams: Record<string, string>,
+    pageable: Pageable,
+  ) => Promise<Slice<PlayerResponse>>;
+  readonly findById: (id: number) => Promise<PlayerResponse>;
+};
 
