@@ -47,4 +47,17 @@ export const createPlayerRouter = (playerService: PlayerReadService): Hono => {
       return c.notFound();
     }
 
- 
+    const player = await playerService.findById(idNumber);
+    const ifNonMatch = req.header("If-None-Match");
+    const { version } = player;
+    if (ifNonMatch === `"${version}"`) {
+      logger.debug("get: Not Modified");
+      return c.body(null, 304);
+    }
+
+    c.header("ETag", `"${version}"`);
+    logger.debug("get: player=%o", player);
+    return c.json(player);
+  });
+
+
