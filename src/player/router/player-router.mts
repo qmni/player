@@ -80,4 +80,14 @@ export const createPlayerRouter = (playerService: PlayerReadService): Hono => {
       return c.json({ count });
     }
 
+    const { page, size } = queryParams;
+    delete queryParams["page"];
+    delete queryParams["size"];
+    logger.debug(
+      "get: page=%s, size=%s, queryParams=%o",
+      page,
+      size,
+      queryParams,
+    );
+
 
