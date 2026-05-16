@@ -90,4 +90,12 @@ export const createPlayerRouter = (playerService: PlayerReadService): Hono => {
       queryParams,
     );
 
+    const pageable = createPageable({ number: page, size });
+    const playersSlice = await playerService.find(queryParams, pageable);
+    const playersPage = createPage(playersSlice, pageable);
+    logger.debug("get: playersPage=%o", playersPage);
+    return c.json(playersPage);
+  });
 
+  return router;
+};
