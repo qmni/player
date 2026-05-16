@@ -60,4 +60,24 @@ export const createPlayerRouter = (playerService: PlayerReadService): Hono => {
     return c.json(player);
   });
 
+  router.get("/", async (c) => {
+    const { req } = c;
+    const accept = req.header("Accept")?.toLowerCase();
+    if (
+      accept !== undefined &&
+      accept !== "*/*" &&
+      !/(json|html)/u.test(accept)
+    ) {
+      logger.debug("get: Accept=%s", accept);
+      return c.body(null, 406);
+    }
+
+    const queryParams = req.query();
+    const countOnly = queryParams["count-only"];
+    if (countOnly !== undefined) {
+      const count = await playerService.count();
+      logger.debug("get: count=%d", count);
+      return c.json({ count });
+    }
+
 
