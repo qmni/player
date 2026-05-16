@@ -67,4 +67,17 @@ export const createPlayerWriteRouter = (
     return c.body(null, 204);
   });
 
+  router.delete("/:id", async (c) => {
+    const id = c.req.param("id");
+    logger.debug("delete: id=%s", id);
 
+    const idNumber = Number.parseInt(id, 10);
+    if (!Number.isNaN(idNumber)) {
+      await playerWriteService.delete(idNumber);
+    }
+
+    return c.body(null, 204);
+  });
+
+  return router;
+};
