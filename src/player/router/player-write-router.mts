@@ -20,4 +20,21 @@ export type PlayerWriteService = {
 
 const logger = getLogger("player-write-router", "file");
 
+export const createPlayerWriteRouter = (
+  playerWriteService: PlayerWriteService,
+): Hono => {
+  const router = new Hono();
+
+  router.post("/", async (c) => {
+    const requestBody = await c.req.json();
+    const playerDTO = PlayerNewSchema.parse(requestBody);
+    logger.debug("post: playerDTO=%o", playerDTO);
+
+    const id = await playerWriteService.create(playerDTO);
+    const location = `${createBaseUrl(c.req)}/${id}`;
+
+    c.header("Location", location);
+    return c.body(null, 201);
+  });
+
 
