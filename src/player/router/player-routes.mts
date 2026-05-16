@@ -13,4 +13,14 @@ export type PlayerRouterServices = {
   readonly playerWriteService: PlayerWriteService;
 };
 
+export const createPlayerRoutes = ({
+  playerService,
+  playerWriteService,
+}: PlayerRouterServices): Hono => {
+  const router = new Hono();
 
+  router.route("/", createPlayerRouter(playerService));
+  router.route("/", createPlayerWriteRouter(playerWriteService));
+
+  return router;
+};
