@@ -8,4 +8,9 @@ import {
   type PlayerWriteService,
 } from "./player-write-router.mts";
 
+export type PlayerRouterServices = {
+  readonly playerService: PlayerReadService;
+  readonly playerWriteService: PlayerWriteService;
+};
+
 
