@@ -27,3 +27,16 @@ export type PlayerReadService = {
   readonly findById: (id: number) => Promise<PlayerResponse>;
 };
 
+const logger = getLogger("player-router", "file");
+
+export const createPlayerRouter = (playerService: PlayerReadService): Hono => {
+  const router = new Hono();
+
+  router.get("/:id", async (c) => {
+    const { req } = c;
+    const accept = req.header("Accept")?.toLowerCase();
+    if (accept !== undefined && !/(json|html)/u.test(accept)) {
+      logger.debug("get: Accept=%s", accept);
+      return c.body(null, 406);
+    }
+
