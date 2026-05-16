@@ -40,3 +40,11 @@ export const createPlayerRouter = (playerService: PlayerReadService): Hono => {
       return c.body(null, 406);
     }
 
+    const id = req.param("id");
+    logger.debug("get: id=%s", id);
+    const idNumber = Number.parseInt(id, 10);
+    if (Number.isNaN(idNumber)) {
+      return c.notFound();
+    }
+
+ 
