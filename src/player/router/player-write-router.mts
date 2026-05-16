@@ -37,4 +37,34 @@ export const createPlayerWriteRouter = (
     return c.body(null, 201);
   });
 
+  router.put("/:id", async (c) => {
+    const { req } = c;
+    const id = req.param("id");
+    logger.debug("put: id=%s", id);
+
+    const idNumber = Number.parseInt(id, 10);
+    if (Number.isNaN(idNumber)) {
+      return c.notFound();
+    }
+
+    const version = req.header("If-Match");
+    if (version === undefined) {
+      logger.debug("put: If-Match header is missing");
+      return c.text('Header "If-Match" is required', 428);
+    }
+
+    const requestBody = await c.req.json();
+    const playerDTO = PlayerUpdateSchema.parse(requestBody);
+    logger.debug("put: playerDTO=%o", playerDTO);
+
+    const newVersion = await playerWriteService.update({
+      id: idNumber,
+      player: playerDTO,
+      version,
+    });
+
+    c.header("ETag", `"${newVersion}"`);
+    return c.body(null, 204);
+  });
+
 
