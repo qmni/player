@@ -166,3 +166,15 @@ export class PlayerWriteService {
 
         this.#logger.debug('#validateCreate: ok');
     }
+
+     async #sendmail({
+        id,
+        username,
+    }: {
+        id: number | 'N/A';
+        username: string;
+    }) {
+        const subject = `Neuer Player ${id}`;
+        const body = `Der Player mit dem Username <strong>${username}</strong> ist angelegt`;
+        await sendmail({ subject, body });
+    }
