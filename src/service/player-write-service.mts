@@ -112,3 +112,23 @@ export class PlayerWriteService {
 
         return playerUpdated?.version ?? Number.NaN;
     }
+
+     async delete(id: number) {
+        this.#logger.debug('delete: id=%d', id);
+
+        const player = await prismaClient.player.findUnique({
+            where: { id },
+        });
+
+        if (player === null) {
+            this.#logger.debug('delete: not found');
+            return false;
+        }
+
+        await prismaClient.$transaction(async (tx) => {
+            await tx.player.delete({ where: { id } });
+        });
+
+        this.#logger.debug('delete');
+        return true;
+    }
