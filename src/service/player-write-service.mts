@@ -49,3 +49,32 @@ export class PlayerWriteService {
     constructor(readService: PlayerService) {
         this.#readService = readService;
     }
+
+        /**
+     * Ein neuer Player soll angelegt werden.
+     * @param player Der neu abzulegende Player
+     * @returns Die ID des neu angelegten Players
+     * @throws UsernameExistsError falls der Username bereits existiert
+     * @throws EmailExistsError falls die E-Mail-Adresse bereits existiert
+     */
+    async create(player: PlayerCreate) {
+        this.#logger.debug('create: player=%o', player);
+        await this.#validateCreate(player);
+
+        let playerDb: PlayerCreated | undefined;
+
+        await prismaClient.$transaction(async (tx) => {
+            playerDb = await tx.player.create({
+                data: player,
+                include: { guild: true },
+            });
+        });
+
+        await this.#sendmail({
+            id: playerDb?.id ?? 'N/A',
+            username: playerDb?.username ?? 'N/A',
+        });
+
+        this.#logger.debug('create: playerDb.id=%s', playerDb?.id);
+        return playerDb?.id ?? Number.NaN;
+    }
