@@ -34,3 +34,18 @@ export type UpdateParams = {
 };
 
 type PlayerUpdated = Prisma.PlayerGetPayload<{}>;
+
+/**
+ * Die Klasse `PlayerWriteService` implementiert den Anwendungskern für das
+ * Schreiben von Playern und greift mit _Prisma_ auf die DB zu.
+ */
+export class PlayerWriteService {
+    private static readonly VERSION_PATTERN = /^"\d{1,3}"/u;
+
+    readonly #readService: PlayerService;
+
+    readonly #logger = getLogger(PlayerWriteService.name);
+
+    constructor(readService: PlayerService) {
+        this.#readService = readService;
+    }
