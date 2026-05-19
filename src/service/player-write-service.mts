@@ -17,3 +17,20 @@ import {
     VersionOutdatedError,
 } from './errors.mts';
 
+export type PlayerCreate = Prisma.PlayerCreateInput;
+
+type PlayerCreated = Prisma.PlayerGetPayload<{
+    include: {
+        guild: true;
+    };
+}>;
+
+export type PlayerUpdate = Prisma.PlayerUpdateInput;
+
+export type UpdateParams = {
+    readonly id: number | undefined;
+    readonly player: PlayerUpdate;
+    readonly version: string;
+};
+
+type PlayerUpdated = Prisma.PlayerGetPayload<{}>;
