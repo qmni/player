@@ -178,3 +178,24 @@ export class PlayerWriteService {
         const body = `Der Player mit dem Username <strong>${username}</strong> ist angelegt`;
         await sendmail({ subject, body });
     }
+
+     async #validateUpdate(id: number, versionStr: string) {
+        this.#logger.debug(
+            '#validateUpdate: id=%d, versionStr=%s',
+            id,
+            versionStr,
+        );
+
+        if (!PlayerWriteService.VERSION_PATTERN.test(versionStr)) {
+            throw new VersionInvalidError(versionStr);
+        }
+
+        const version = Number.parseInt(versionStr.slice(1, -1), 10);
+        const playerDb = await this.#readService.findById({ id });
+
+        if (version < playerDb.version) {
+            this.#logger.debug('#validateUpdate: versionDb=%d', version);
+            throw new VersionOutdatedError(version);
+        }
+    }
+}
