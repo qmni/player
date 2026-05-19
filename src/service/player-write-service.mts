@@ -132,3 +132,37 @@ export class PlayerWriteService {
         this.#logger.debug('delete');
         return true;
     }
+
+    async #validateCreate({
+        username,
+        email,
+    }: Prisma.PlayerCreateInput): Promise<undefined> {
+        this.#logger.debug(
+            '#validateCreate: username=%s, email=%s',
+            username,
+            email,
+        );
+
+        const usernameCount = await prismaClient.player.count({
+            where: { username },
+        });
+
+        if (usernameCount > 0) {
+            this.#logger.debug(
+                '#validateCreate: username existiert: %s',
+                username,
+            );
+            throw new UsernameExistsError(username);
+        }
+
+        const emailCount = await prismaClient.player.count({
+            where: { email },
+        });
+
+        if (emailCount > 0) {
+            this.#logger.debug('#validateCreate: email existiert: %s', email);
+            throw new EmailExistsError(email);
+        }
+
+        this.#logger.debug('#validateCreate: ok');
+    }
