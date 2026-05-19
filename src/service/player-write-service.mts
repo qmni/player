@@ -63,7 +63,7 @@ export class PlayerWriteService {
 
         let playerDb: PlayerCreated | undefined;
 
-        await prismaClient.$transaction(async (tx) => {
+        await prismaClient.$transaction(async (tx: { player: { create: (arg0: { data: Prisma.PlayerCreateInput; include: { guild: boolean; }; }) => any; }; }) => {
             playerDb = await tx.player.create({
                 data: player,
                 include: { guild: true },
@@ -98,7 +98,7 @@ export class PlayerWriteService {
 
         let playerUpdated: PlayerUpdated | undefined;
 
-        await prismaClient.$transaction(async (tx) => {
+        await prismaClient.$transaction(async (tx: { player: { update: (arg0: { data: Prisma.PlayerUpdateInput; where: { id: number; }; }) => any; }; }) => {
             playerUpdated = await tx.player.update({
                 data: player,
                 where: { id },
@@ -125,7 +125,7 @@ export class PlayerWriteService {
             return false;
         }
 
-        await prismaClient.$transaction(async (tx) => {
+        await prismaClient.$transaction(async (tx: { player: { delete: (arg0: { where: { id: number; }; }) => any; }; }) => {
             await tx.player.delete({ where: { id } });
         });
 
