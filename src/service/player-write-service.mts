@@ -78,3 +78,37 @@ export class PlayerWriteService {
         this.#logger.debug('create: playerDb.id=%s', playerDb?.id);
         return playerDb?.id ?? Number.NaN;
     }
+
+    async update({ id, player, version }: UpdateParams) {
+        this.#logger.debug(
+            'update: id=%s, player=%o, version=%s',
+            id,
+            player,
+            version,
+        );
+
+        if (id === undefined) {
+            this.#logger.debug('update: Keine gueltige ID');
+            throw new NotFoundError(`Es gibt keinen Player mit der ID ${id}.`);
+        }
+
+        await this.#validateUpdate(id, version);
+
+        player.version = { increment: 1 };
+
+        let playerUpdated: PlayerUpdated | undefined;
+
+        await prismaClient.$transaction(async (tx) => {
+            playerUpdated = await tx.player.update({
+                data: player,
+                where: { id },
+            });
+        });
+
+        this.#logger.debug(
+            'update: playerUpdated=%s',
+            JSON.stringify(playerUpdated),
+        );
+
+        return playerUpdated?.version ?? Number.NaN;
+    }
