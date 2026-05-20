@@ -31,4 +31,42 @@ export class KeycloakService {
     );
   }
 
+  async token({ username, password }: TokenData) {
+    this.#logger.debug("token: username=%s", username);
+    if (typeof username !== "string" || typeof password !== "string") {
+      return;
+    }
+
+    const body = `username=${username}&password=${password}&grant_type=password&client_id=${clientId}&client_secret=${secret}`;
+
+    this.#logger.debug("token: path=%s", accessTokenUrl);
+    this.#logger.debug("token: headers=%o", this.#headers);
+
+    let response: Response;
+    try {
+      response = await fetch(accessTokenUrl, {
+        method: POST,
+        body,
+        headers: this.#headers,
+      });
+    } catch (err) {
+      this.#logger.warn("Fehler beim Zugriff auf Keycloak: %o", err as object);
+      return;
+    }
+
+    const { status } = response;
+    if (status !== 200) {
+      this.#logger.warn(
+        "Fehler beim Netzwerkzugriff auf Keycloak. Statuscode: %d",
+        status,
+      );
+      return;
+    }
+
+    const responseBody = await response.json();
+    this.#logPayload(responseBody);
+    this.#logger.debug("token: responseBody=%o", responseBody as object);
+    return responseBody;
+  }
+
 
