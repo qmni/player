@@ -51,4 +51,21 @@ const getRoles = (payload: any) => {
   return roles;
 };
 
+export const rolesRequired =
+  (...requiredRoles: Role[]) =>
+  async (c: Context, next: Next) => {
+    const { req } = c;
+    const token = getToken(req);
+    const { payload } = await verifyToken(token);
+    logger.debug("rolesRequired: payload=%o", payload);
 
+    const roles = getRoles(payload);
+    const roleExists = requiredRoles.some((role) => roles.includes(role));
+    if (!roleExists) {
+      throw new ForbiddenError("Erforderliche Rolle nicht vorhanden");
+    }
+
+    (req as any).tokenPayload = payload;
+
+    await next();
+  };
