@@ -41,4 +41,14 @@ const verifyToken = async (token: string) => {
   }
 };
 
+const getRoles = (payload: any) => {
+  const roles = payload?.resource_access?.[clientId]?.roles;
+  if (!Array.isArray(roles)) {
+    throw new ForbiddenError("Keine Rolle im Token enthalten");
+  }
+
+  logger.debug("getRoles: roles=%o", roles);
+  return roles;
+};
+
 
