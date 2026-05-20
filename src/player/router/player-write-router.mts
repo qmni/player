@@ -1,5 +1,11 @@
 import { Hono } from "hono";
+import { container } from "../../container.mts";
+import { type Prisma } from "../../generated/prisma/client.ts";
 import { getLogger } from "../../logger/logger.mts";
+import {
+  createProblemDetails,
+  preconditionRequired,
+} from "../../problem-details.mts";
 import { createBaseUrl } from "./create-base-url.mts";
 import {
   PlayerNewSchema,
@@ -8,76 +14,100 @@ import {
   type PlayerUpdateType,
 } from "./player-validation.mts";
 
-export type PlayerWriteService = {
-  readonly create: (player: PlayerNewType) => Promise<number>;
-  readonly update: (props: {
-    readonly id: number;
-    readonly player: PlayerUpdateType;
-    readonly version: string;
-  }) => Promise<number>;
-  readonly delete: (id: number) => Promise<void>;
-};
+const { playerWriteService } = container;
 
 const logger = getLogger("player-write-router", "file");
 
-export const createPlayerWriteRouter = (
-  playerWriteService: PlayerWriteService,
-): Hono => {
-  const router = new Hono();
+export const router = new Hono();
 
-  router.post("/", async (c) => {
-    const requestBody = await c.req.json();
-    const playerDTO = PlayerNewSchema.parse(requestBody);
-    logger.debug("post: playerDTO=%o", playerDTO);
+const playerDtoToPlayerCreateInput = (
+  playerDTO: PlayerNewType,
+): Prisma.PlayerCreateInput => ({
+  username: playerDTO.username,
+  email: playerDTO.email,
+  level: playerDTO.level,
+  experience: playerDTO.experience,
+  playerClass: playerDTO.playerClass,
+  ...(playerDTO.status === undefined ? {} : { status: playerDTO.status }),
+  ...(playerDTO.guildId === undefined
+    ? {}
+    : { guild: { connect: { id: playerDTO.guildId } } }),
+});
 
-    const id = await playerWriteService.create(playerDTO);
-    const location = `${createBaseUrl(c.req)}/${id}`;
+const playerDtoToPlayerUpdateInput = (
+  playerDTO: PlayerUpdateType,
+): Prisma.PlayerUpdateInput => ({
+  ...(playerDTO.username === undefined ? {} : { username: playerDTO.username }),
+  ...(playerDTO.email === undefined ? {} : { email: playerDTO.email }),
+  ...(playerDTO.level === undefined ? {} : { level: playerDTO.level }),
+  ...(playerDTO.experience === undefined
+    ? {}
+    : { experience: playerDTO.experience }),
+  ...(playerDTO.playerClass === undefined
+    ? {}
+    : { playerClass: playerDTO.playerClass }),
+  ...(playerDTO.status === undefined ? {} : { status: playerDTO.status }),
+  ...(playerDTO.guildId === undefined
+    ? {}
+    : { guild: { connect: { id: playerDTO.guildId } } }),
+});
 
-    c.header("Location", location);
-    return c.body(null, 201);
+router.post("/", async (c) => {
+  const requestBody = await c.req.json();
+  const playerDTO = PlayerNewSchema.parse(requestBody);
+  logger.debug("post: playerDTO=%o", playerDTO);
+
+  const player = playerDtoToPlayerCreateInput(playerDTO);
+  const id = await playerWriteService.create(player);
+  const location = `${createBaseUrl(c.req)}/${id}`;
+
+  c.header("Location", location);
+  return c.body(null, 201);
+});
+
+router.put("/:id", async (c) => {
+  const { req } = c;
+  const id = req.param("id");
+  logger.debug("put: id=%s", id);
+
+  const idNumber = Number.parseInt(id, 10);
+  if (Number.isNaN(idNumber)) {
+    return c.notFound();
+  }
+
+  const version = req.header("If-Match");
+  if (version === undefined) {
+    logger.debug("put: If-Match header is missing");
+    return createProblemDetails(
+      c,
+      preconditionRequired,
+      'Header "If-Match" fehlt',
+    );
+  }
+
+  const requestBody = await c.req.json();
+  const playerDTO = PlayerUpdateSchema.parse(requestBody);
+  logger.debug("put: playerDTO=%o", playerDTO);
+
+  const player = playerDtoToPlayerUpdateInput(playerDTO);
+  const newVersion = await playerWriteService.update({
+    id: idNumber,
+    player,
+    version,
   });
 
-  router.put("/:id", async (c) => {
-    const { req } = c;
-    const id = req.param("id");
-    logger.debug("put: id=%s", id);
+  c.header("ETag", `"${newVersion}"`);
+  return c.body(null, 204);
+});
 
-    const idNumber = Number.parseInt(id, 10);
-    if (Number.isNaN(idNumber)) {
-      return c.notFound();
-    }
+router.delete("/:id", async (c) => {
+  const id = c.req.param("id");
+  logger.debug("delete: id=%s", id);
 
-    const version = req.header("If-Match");
-    if (version === undefined) {
-      logger.debug("put: If-Match header is missing");
-      return c.text('Header "If-Match" is required', 428);
-    }
+  const idNumber = Number.parseInt(id, 10);
+  if (!Number.isNaN(idNumber)) {
+    await playerWriteService.delete(idNumber);
+  }
 
-    const requestBody = await c.req.json();
-    const playerDTO = PlayerUpdateSchema.parse(requestBody);
-    logger.debug("put: playerDTO=%o", playerDTO);
-
-    const newVersion = await playerWriteService.update({
-      id: idNumber,
-      player: playerDTO,
-      version,
-    });
-
-    c.header("ETag", `"${newVersion}"`);
-    return c.body(null, 204);
-  });
-
-  router.delete("/:id", async (c) => {
-    const id = c.req.param("id");
-    logger.debug("delete: id=%s", id);
-
-    const idNumber = Number.parseInt(id, 10);
-    if (!Number.isNaN(idNumber)) {
-      await playerWriteService.delete(idNumber);
-    }
-
-    return c.body(null, 204);
-  });
-
-  return router;
-};
+  return c.body(null, 204);
+});
