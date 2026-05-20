@@ -46,11 +46,9 @@ export class PlayerService {
     }: FindByIdParams): Promise<Readonly<PlayerOhneGuild | PlayerMitGuild>> {
         this.#logger.debug('findById: id=%d', id);
 
-        const include = mitGuild ? this.#includeGuild : undefined;
-
         const player = await prismaClient.player.findUnique({
             where: { id },
-            include,
+            ...(mitGuild === true ? { include: this.#includeGuild } : {}),
         });
 
         if (player === null) {
