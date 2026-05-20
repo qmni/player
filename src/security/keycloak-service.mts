@@ -13,4 +13,22 @@ export type TokenData = {
   readonly password: string | undefined;
 };
 
+export class KeycloakService {
+  readonly #headers: Headers;
+  readonly #headersAuthorization: Headers;
+  readonly #logger = getLogger(KeycloakService.name);
+
+  constructor() {
+    this.#headers = new Headers();
+    this.#headers.append(CONTENT_TYPE, X_WWW_FORM_URLENCODED);
+
+    const encoded = btoa(`${clientId}:${secret}`);
+    this.#headersAuthorization = new Headers();
+    this.#headersAuthorization.append(CONTENT_TYPE, X_WWW_FORM_URLENCODED);
+    this.#headersAuthorization.append(
+      AUTHORIZATION,
+      `${BASIC_AUTH} ${encoded}`,
+    );
+  }
+
 
