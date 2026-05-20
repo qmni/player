@@ -50,7 +50,7 @@ export class PlayerWriteService {
         this.#readService = readService;
     }
 
-        /**
+    /**
      * Ein neuer Player soll angelegt werden.
      * @param player Der neu abzulegende Player
      * @returns Die ID des neu angelegten Players
@@ -63,7 +63,7 @@ export class PlayerWriteService {
 
         let playerDb: PlayerCreated | undefined;
 
-        await prismaClient.$transaction(async (tx: { player: { create: (arg0: { data: Prisma.PlayerCreateInput; include: { guild: boolean; }; }) => any; }; }) => {
+        await prismaClient.$transaction(async (tx) => {
             playerDb = await tx.player.create({
                 data: player,
                 include: { guild: true },
@@ -98,7 +98,7 @@ export class PlayerWriteService {
 
         let playerUpdated: PlayerUpdated | undefined;
 
-        await prismaClient.$transaction(async (tx: { player: { update: (arg0: { data: Prisma.PlayerUpdateInput; where: { id: number; }; }) => any; }; }) => {
+        await prismaClient.$transaction(async (tx) => {
             playerUpdated = await tx.player.update({
                 data: player,
                 where: { id },
@@ -113,7 +113,7 @@ export class PlayerWriteService {
         return playerUpdated?.version ?? Number.NaN;
     }
 
-     async delete(id: number) {
+    async delete(id: number) {
         this.#logger.debug('delete: id=%d', id);
 
         const player = await prismaClient.player.findUnique({
@@ -125,7 +125,7 @@ export class PlayerWriteService {
             return false;
         }
 
-        await prismaClient.$transaction(async (tx: { player: { delete: (arg0: { where: { id: number; }; }) => any; }; }) => {
+        await prismaClient.$transaction(async (tx) => {
             await tx.player.delete({ where: { id } });
         });
 
@@ -167,7 +167,7 @@ export class PlayerWriteService {
         this.#logger.debug('#validateCreate: ok');
     }
 
-     async #sendmail({
+    async #sendmail({
         id,
         username,
     }: {
@@ -176,10 +176,11 @@ export class PlayerWriteService {
     }) {
         const subject = `Neuer Player ${id}`;
         const body = `Der Player mit dem Username <strong>${username}</strong> ist angelegt`;
+
         await sendmail({ subject, body });
     }
 
-     async #validateUpdate(id: number, versionStr: string) {
+    async #validateUpdate(id: number, versionStr: string) {
         this.#logger.debug(
             '#validateUpdate: id=%d, versionStr=%s',
             id,
