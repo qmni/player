@@ -10,6 +10,7 @@ import { paths } from "./config/paths.mts";
 import { getLogger } from "./logger/logger.mts";
 import { requestLogger } from "./logger/request-logger.mts";
 import { responseTime } from "./logger/response-time.mts";
+import { router as healthRouter } from "./admin/health-router.mts";
 import { trackMetrics } from "./monitoring/prometheus-metrics.mts";
 import { router as prometheusRouter } from "./monitoring/prometheus-router.mts";
 import { createPlayerRoutes } from "./player/router/player-routes.mts";
@@ -48,10 +49,40 @@ if (logger.isLevelEnabled("debug")) {
 }
 
 app.route(`${paths.rest}/player`, createPlayerRoutes());
+app.route(paths.health, healthRouter);
 app.route("/prometheus", prometheusRouter);
 
 if (logger.isLevelEnabled("debug")) {
   showRoutes(app, { verbose: true });
 }
 
+app.onError((error, c) => {
+  if (error instanceof NotFoundError) {
+    return c.notFound();
+  }
 
+  if (error.name === "ZodError") {
+    return createProblemDetails(
+      c,
+      unprocessableContent,
+      (error as ZodError).issues,
+    );
+  }
+
+  if (
+    error instanceof UsernameExistsError ||
+    error instanceof EmailExistsError
+  ) {
+    return createProblemDetails(c, unprocessableContent, error.message);
+  }
+
+  if (
+    error instanceof VersionInvalidError ||
+    error instanceof VersionOutdatedError
+  ) {
+    return createProblemDetails(c, preconditionFailed, error.message);
+  }
+
+  logger.error("Interner Fehler: %o", error);
+  return c.body("Interner Fehler", 500);
+});
