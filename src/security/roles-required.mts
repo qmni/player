@@ -26,4 +26,19 @@ const getToken = (req: HonoRequest) => {
   return token;
 };
 
+const verifyToken = async (token: string) => {
+  try {
+    return await jwtVerify(token, jwks, {
+      issuer,
+      audience,
+    });
+  } catch (err) {
+    logger.debug("verifyToken: err=%o", err as object);
+    if (err instanceof JOSEError) {
+      throw new UnauthorizedError("Token nicht gueltig");
+    }
+    throw new InternalServerError();
+  }
+};
+
 
