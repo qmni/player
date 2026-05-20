@@ -8,4 +8,9 @@ const CONTENT_TYPE = "Content-Type";
 const X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded";
 const POST = "POST";
 
+export type TokenData = {
+  readonly username: string | undefined;
+  readonly password: string | undefined;
+};
+
 
