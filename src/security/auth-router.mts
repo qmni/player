@@ -14,3 +14,19 @@ export class TokenData {
 
 export const router = new Hono();
 
+router.post(paths.token, async (c) => {
+  const body: Record<string, string> = await c.req.parseBody();
+  const { username, password } = body;
+  logger.debug("post: username=%s", username);
+
+  const result = await keycloakService.token({ username, password });
+  if (result === undefined) {
+    return createProblemDetails(
+      c,
+      unauthorized,
+      "Fehler beim Authentifizieren",
+    );
+  }
+
+  return c.json(result);
+});
