@@ -66,4 +66,7 @@ export const createProblemDetails = (
         }
     }
 
-
+    const response = ctx.json(problemDetails, statusCode);
+    response.headers.set('Content-Type', 'application/problem+json');
+    return response;
+};
