@@ -15,4 +15,15 @@ const logger = getLogger("roles-required", "file");
 const { issuer, jwksUri, clientId, audience } = keycloakConfig;
 const jwks = createRemoteJWKSet(new URL(jwksUri));
 
+const getToken = (req: HonoRequest) => {
+  const auth = req.header("Authorization");
+  if (!auth?.startsWith("Bearer ")) {
+    throw new UnauthorizedError("Authorization fehlt im Header");
+  }
+
+  const token = auth.slice(7);
+  logger.debug("getToken: token=%s", token);
+  return token;
+};
+
 
