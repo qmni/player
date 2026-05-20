@@ -26,4 +26,18 @@ import {
   unprocessableContent,
 } from "./problem-details.mts";
 
+/**
+ * Web-Applikation mit Hono.
+ */
+export const app = new Hono();
+
+const logger = getLogger("app", "file");
+
+// Globale Middleware muss vor den Routen registriert werden.
+const securityHeaders = createMiddleware(async (c: Context, next: Next) => {
+  c.header("X-Content-Type-Options", "nosniff");
+  c.header("X-Frame-Options", "SAMEORIGIN");
+  await next();
+});
+
 
