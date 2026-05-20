@@ -8,5 +8,11 @@ export const preconditionFailed = 412;
 export const unprocessableContent = 422;
 export const preconditionRequired = 428;
 
+export type ProblemDetails = {
+    title: string;
+    statusCode: ClientErrorStatusCode;
+    detail: unknown;
+};
+
 
 
