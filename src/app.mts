@@ -40,4 +40,18 @@ const securityHeaders = createMiddleware(async (c: Context, next: Next) => {
   await next();
 });
 
+app.use(secureHeaders(), cors(corsOptions), securityHeaders, compress());
+app.use(trackMetrics);
+
+if (logger.isLevelEnabled("debug")) {
+  app.use(responseTime, requestLogger);
+}
+
+app.route(`${paths.rest}/player`, createPlayerRoutes());
+app.route("/prometheus", prometheusRouter);
+
+if (logger.isLevelEnabled("debug")) {
+  showRoutes(app, { verbose: true });
+}
+
 
