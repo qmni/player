@@ -23,9 +23,13 @@ import {
 } from "./player/service/errors.mts";
 import {
   createProblemDetails,
+  forbidden,
   preconditionFailed,
+  unauthorized,
   unprocessableContent,
 } from "./problem-details.mts";
+import { router as authRouter } from "./security/auth-router.mts";
+import { ForbiddenError, UnauthorizedError } from "./security/errors.mts";
 
 /**
  * Web-Applikation mit Hono.
@@ -50,6 +54,7 @@ if (logger.isLevelEnabled("debug")) {
 
 app.route(`${paths.rest}/player`, createPlayerRoutes());
 app.route(paths.health, healthRouter);
+app.route(paths.auth, authRouter);
 app.route("/prometheus", prometheusRouter);
 
 if (logger.isLevelEnabled("debug")) {
@@ -81,6 +86,14 @@ app.onError((error, c) => {
     error instanceof VersionOutdatedError
   ) {
     return createProblemDetails(c, preconditionFailed, error.message);
+  }
+
+  if (error instanceof UnauthorizedError) {
+    return createProblemDetails(c, unauthorized, error.message);
+  }
+
+  if (error instanceof ForbiddenError) {
+    return createProblemDetails(c, forbidden, error.message);
   }
 
   logger.error("Interner Fehler: %o", error);

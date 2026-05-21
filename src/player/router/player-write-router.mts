@@ -6,6 +6,7 @@ import {
   createProblemDetails,
   preconditionRequired,
 } from "../../problem-details.mts";
+import { rolesRequired } from "../../security/roles-required.mts";
 import { createBaseUrl } from "./create-base-url.mts";
 import {
   PlayerNewSchema,
@@ -52,7 +53,7 @@ const playerDtoToPlayerUpdateInput = (
     : { guild: { connect: { id: playerDTO.guildId } } }),
 });
 
-router.post("/", async (c) => {
+router.post("/", rolesRequired("admin", "player"), async (c) => {
   const requestBody = await c.req.json();
   const playerDTO = PlayerNewSchema.parse(requestBody);
   logger.debug("post: playerDTO=%o", playerDTO);
@@ -65,9 +66,9 @@ router.post("/", async (c) => {
   return c.body(null, 201);
 });
 
-router.put("/:id", async (c) => {
+router.put("/:id", rolesRequired("admin", "player"), async (c) => {
   const { req } = c;
-  const id = req.param("id");
+  const id = req.param("id") ?? "-1";
   logger.debug("put: id=%s", id);
 
   const idNumber = Number.parseInt(id, 10);
@@ -100,8 +101,8 @@ router.put("/:id", async (c) => {
   return c.body(null, 204);
 });
 
-router.delete("/:id", async (c) => {
-  const id = c.req.param("id");
+router.delete("/:id", rolesRequired("admin"), async (c) => {
+  const id = c.req.param("id") ?? "-1";
   logger.debug("delete: id=%s", id);
 
   const idNumber = Number.parseInt(id, 10);
