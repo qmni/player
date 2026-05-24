@@ -74,3 +74,39 @@ export const createHandler = async (
     logger.debug('createHandler: id=%d', id);
     return { id: toID(id) };
 };
+
+// -----------------------------------------------------------------------------
+// A e n d e r n
+// -----------------------------------------------------------------------------
+
+const validatePlayerUpdate = (player: PlayerUpdateInput) => {
+    try {
+        PlayerUpdateGraphQLSchema.parse(player);
+    } catch (err) {
+        if (err instanceof Error) {
+            const { message } = err;
+
+            if (err.name === 'ZodError') {
+                throw new GraphQLError(message, {
+                    extensions: {
+                        code: 'BAD_USER_INPUT',
+                    },
+                });
+            }
+
+            throw new GraphQLError(message, {
+                extensions: {
+                    code: 'INTERNAL_SERVER_ERROR',
+                },
+            });
+        }
+
+        throw new GraphQLError('Unbekannter Fehler', {
+            extensions: {
+                code: 'INTERNAL_SERVER_ERROR',
+            },
+        });
+    }
+
+    logger.debug('validatePlayerUpdate: ok');
+};
