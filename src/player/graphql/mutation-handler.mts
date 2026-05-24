@@ -22,3 +22,39 @@ import {
 
 const logger = getLogger('mutation-handler', 'file');
 const { playerWriteService, keycloakService } = container;
+
+// -----------------------------------------------------------------------------
+// N e u a n l e g e n
+// -----------------------------------------------------------------------------
+
+const validatePlayerNeu = (player: PlayerNeuInput) => {
+    try {
+        PlayerNewSchema.parse(player);
+    } catch (err) {
+        if (err instanceof Error) {
+            const { message } = err;
+
+            if (err.name === 'ZodError') {
+                throw new GraphQLError(message, {
+                    extensions: {
+                        code: 'BAD_USER_INPUT',
+                    },
+                });
+            }
+
+            throw new GraphQLError(message, {
+                extensions: {
+                    code: 'INTERNAL_SERVER_ERROR',
+                },
+            });
+        }
+
+        throw new GraphQLError('Unbekannter Fehler', {
+            extensions: {
+                code: 'INTERNAL_SERVER_ERROR',
+            },
+        });
+    }
+
+    logger.debug('validatePlayerNeu: ok');
+};
