@@ -58,3 +58,10 @@ const validatePlayerNeu = (player: PlayerNeuInput) => {
 
     logger.debug('validatePlayerNeu: ok');
 };
+
+export const createHandler = async (
+    input: PlayerNeuInput,
+): Promise<CreatePayload> => {
+    logger.debug('createHandler: input=%o', input);
+
+    validatePlayerNeu(input);
