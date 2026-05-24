@@ -65,3 +65,12 @@ export const createHandler = async (
     logger.debug('createHandler: input=%o', input);
 
     validatePlayerNeu(input);
+
+     const playerCreate = toCreate(input);
+    logger.debug('createHandler: playerCreate=%o', playerCreate);
+
+    const id = await playerWriteService.create(playerCreate);
+
+    logger.debug('createHandler: id=%d', id);
+    return { id: toID(id) };
+};
