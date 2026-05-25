@@ -38,3 +38,72 @@ const getToken = (headers: Headers) => {
     logger.debug('getToken: token=%s', token);
     return token;
 };
+
+const verifyToken = async (token: string) => {
+    try {
+        return await jwtVerify(token, jwks, {
+            issuer,
+            audience,
+        });
+    } catch (err) {
+        logger.debug('verifyToken: verifyResult err=%o', err);
+
+        if (err instanceof JOSEError) {
+            throw new GraphQLError('Token nicht (mehr) gueltig', {
+                extensions: {
+                    code: 'UNAUTHENTICATED',
+                },
+            });
+        }
+
+        const message =
+            err instanceof Error ? err.message : 'Unbekannter Fehler';
+
+        throw new GraphQLError(message, {
+            extensions: {
+                code: 'INTERNAL_SERVER_ERROR',
+            },
+        });
+    }
+};
+
+const getRollen = (payload: KeycloakPayload): string[] => {
+    const roles = payload.resource_access?.[clientId]?.roles;
+
+    if (
+        !Array.isArray(roles) ||
+        !roles.every((role): role is string => typeof role === 'string')
+    ) {
+        throw new GraphQLError('Erforderliche Rolle nicht vorhanden', {
+            extensions: {
+                code: 'FORBIDDEN',
+            },
+        });
+    }
+
+    logger.debug('getRollen: roles=%o', roles);
+    return roles;
+};
+
+export const rolesRequired = async (request: Request, ...roles: string[]) => {
+    const token = getToken(request.headers);
+
+    const { payload } = await verifyToken(token);
+    const keycloakPayload = payload as KeycloakPayload;
+
+    logger.debug('rolesRequired: payload=%o', keycloakPayload);
+
+    const rollenToken = getRollen(keycloakPayload);
+
+    const rolleVorhanden = roles.some((role) => rollenToken.includes(role));
+
+    if (!rolleVorhanden) {
+        throw new GraphQLError('Erforderliche Rolle nicht vorhanden', {
+            extensions: {
+                code: 'FORBIDDEN',
+            },
+        });
+    }
+
+    (request as RequestWithTokenPayload).tokenPayload = keycloakPayload;
+};
