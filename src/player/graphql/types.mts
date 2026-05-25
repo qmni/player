@@ -325,3 +325,18 @@ export const toUpdate = (player: PlayerUpdateInput): PlayerUpdate => {
 
     return playerUpdate;
 };
+
+export type UpdatePayload = {
+    readonly version: Int;
+};
+
+export type DeletePayload = {
+    readonly success: boolean;
+};
+
+export type TokenPayload = {
+    readonly access_token: string;
+    readonly expires_in: Int;
+    readonly refresh_token: string;
+    readonly refresh_expires_in: Int;
+};
