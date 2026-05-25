@@ -278,3 +278,7 @@ export const toCreate = (player: PlayerNeuInput): PlayerCreate => {
 
     return playerCreate;
 };
+
+export type CreatePayload = {
+    readonly id: ID;
+};
