@@ -188,3 +188,51 @@ export type SuchParameterInput = {
     guildId?: Int;
     guild?: string;
 };
+
+export const toSuchparameter = (
+    param?: SuchParameterInput,
+): Suchparameter | undefined => {
+    if (param === undefined) {
+        return undefined;
+    }
+
+    const {
+        username,
+        email,
+        level,
+        experience,
+        playerClass,
+        status,
+        guildId,
+        guild,
+    } = param;
+
+    const suchparameter: Record<string, string> = {};
+
+    if (username !== undefined) {
+        suchparameter['username'] = username;
+    }
+    if (email !== undefined) {
+        suchparameter['email'] = email;
+    }
+    if (level !== undefined) {
+        suchparameter['level'] = level.toString();
+    }
+    if (experience !== undefined) {
+        suchparameter['experience'] = experience.toString();
+    }
+    if (playerClass !== undefined) {
+        suchparameter['playerClass'] = playerClass;
+    }
+    if (status !== undefined) {
+        suchparameter['status'] = status;
+    }
+    if (guildId !== undefined) {
+        suchparameter['guildId'] = guildId.toString();
+    }
+    if (guild !== undefined) {
+        suchparameter['guild'] = guild;
+    }
+
+    return suchparameter as Suchparameter;
+};
