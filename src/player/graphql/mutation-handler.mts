@@ -145,3 +145,16 @@ export const updateHandler = async (
     logger.debug('updateHandler: version=%s', version);
     return { version: toInt(version ?? 0) };
 };
+
+// -----------------------------------------------------------------------------
+// L o e s c h e n
+// -----------------------------------------------------------------------------
+
+export const deleteHandler = async (id: ID) => {
+    logger.debug('deleteHandler: id=%s', id);
+
+    const success = await playerWriteService.delete(toNumber(id));
+
+    const payload: DeletePayload = { success };
+    return payload;
+};
