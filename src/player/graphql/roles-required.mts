@@ -46,7 +46,7 @@ const verifyToken = async (token: string) => {
             audience,
         });
     } catch (err) {
-        logger.debug('verifyToken: verifyResult err=%o', err);
+        logger.debug('verifyToken: verifyResult err=%o', err as object);
 
         if (err instanceof JOSEError) {
             throw new GraphQLError('Token nicht (mehr) gueltig', {

@@ -10,7 +10,7 @@ import {
 import { playerHandler, playersHandler } from './query-handler.mts';
 import { rolesRequired } from './roles-required.mts';
 import {
-    ID,
+    type ID,
     type PlayerNeuInput,
     type PlayerUpdateInput,
     type SuchParameterInput,
