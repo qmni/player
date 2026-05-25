@@ -282,3 +282,15 @@ export const toCreate = (player: PlayerNeuInput): PlayerCreate => {
 export type CreatePayload = {
     readonly id: ID;
 };
+
+export type PlayerUpdateInput = {
+    id: ID;
+    version: Int;
+    username?: string;
+    email?: string;
+    level?: Int;
+    experience?: Int;
+    playerClass?: 'WARRIOR' | 'MAGE' | 'ROGUE' | 'PRIEST' | 'HUNTER';
+    status?: 'ACTIVE' | 'BANNED' | 'DELETED';
+    guildId?: Int;
+};
