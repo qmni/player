@@ -247,3 +247,34 @@ export type PlayerNeuInput = {
     status?: 'ACTIVE' | 'BANNED' | 'DELETED';
     guildId?: Int;
 };
+
+export const toCreate = (player: PlayerNeuInput): PlayerCreate => {
+    const {
+        username,
+        email,
+        level,
+        experience,
+        playerClass,
+        status,
+        guildId,
+    } = player;
+
+    const playerCreate: PlayerCreate = {
+        username,
+        email,
+        level: level ?? 1,
+        experience: experience ?? 0,
+        playerClass,
+        status: status ?? 'ACTIVE',
+    };
+
+    if (guildId !== undefined) {
+        playerCreate.guild = {
+            connect: {
+                id: guildId,
+            },
+        };
+    }
+
+    return playerCreate;
+};
