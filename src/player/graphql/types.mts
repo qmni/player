@@ -143,3 +143,37 @@ export type Player = {
         version: Int;
     };
 };
+
+export const toPlayerType = (player: PlayerMitGuild): Player => {
+    const result: Player = {
+        id: toID(player.id),
+        username: player.username,
+        email: player.email,
+        level: toInt(player.level),
+        experience: toInt(player.experience),
+        playerClass: player.playerClass,
+        status: player.status,
+        createdAt: player.createdAt.toISOString(),
+        updatedAt: player.updatedAt.toISOString(),
+        version: toInt(player.version),
+    };
+
+    if (player.guildId !== null) {
+        result.guildId = toInt(player.guildId);
+    }
+
+    if (player.guild !== null) {
+        result.guild = {
+            id: toID(player.guild.id),
+            name: player.guild.name,
+            foundedAt: player.guild.foundedAt.toISOString(),
+            version: toInt(player.guild.version),
+        };
+
+        if (player.guild.description !== null) {
+            result.guild.description = player.guild.description;
+        }
+    }
+
+    return result;
+};
