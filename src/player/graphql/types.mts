@@ -236,3 +236,14 @@ export const toSuchparameter = (
 
     return suchparameter as Suchparameter;
 };
+
+export type PlayerNeuInput = {
+    username: string;
+    email: string;
+    playerClass: 'WARRIOR' | 'MAGE' | 'ROGUE' | 'PRIEST' | 'HUNTER';
+
+    level?: Int;
+    experience?: Int;
+    status?: 'ACTIVE' | 'BANNED' | 'DELETED';
+    guildId?: Int;
+};
