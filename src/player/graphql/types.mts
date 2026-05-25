@@ -177,3 +177,14 @@ export const toPlayerType = (player: PlayerMitGuild): Player => {
 
     return result;
 };
+
+export type SuchParameterInput = {
+    username?: string;
+    email?: string;
+    level?: Int;
+    experience?: Int;
+    playerClass?: 'WARRIOR' | 'MAGE' | 'ROGUE' | 'PRIEST' | 'HUNTER';
+    status?: 'ACTIVE' | 'BANNED' | 'DELETED';
+    guildId?: Int;
+    guild?: string;
+};
