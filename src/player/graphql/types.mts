@@ -122,3 +122,24 @@ export const typeDefs = /* GraphQL */ `
         HUNTER
     }
 `;
+
+export type Player = {
+    id: ID;
+    username: string;
+    email: string;
+    level: Int;
+    experience: Int;
+    playerClass: 'WARRIOR' | 'MAGE' | 'ROGUE' | 'PRIEST' | 'HUNTER';
+    status: 'ACTIVE' | 'BANNED' | 'DELETED';
+    guildId?: Int;
+    createdAt: string;
+    updatedAt: string;
+    version: Int;
+    guild?: {
+        id: ID;
+        name: string;
+        description?: string;
+        foundedAt: string;
+        version: Int;
+    };
+};
