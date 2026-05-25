@@ -22,3 +22,19 @@ type KeycloakPayload = JWTPayload & {
 type RequestWithTokenPayload = Request & {
     tokenPayload?: KeycloakPayload;
 };
+
+const getToken = (headers: Headers) => {
+    const auth = headers.get('Authorization');
+
+    if (!auth?.startsWith('Bearer ')) {
+        throw new GraphQLError('Authorization im Header ist falsch', {
+            extensions: {
+                code: 'UNAUTHENTICATED',
+            },
+        });
+    }
+
+    const token = auth.slice(7);
+    logger.debug('getToken: token=%s', token);
+    return token;
+};
