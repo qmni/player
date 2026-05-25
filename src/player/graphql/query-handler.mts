@@ -3,7 +3,6 @@ import { container } from '../../container.mts';
 import { getLogger } from '../../logger/logger.mts';
 import {
     type PlayerMitGuild,
-    type PlayerOhneGuild,
 } from '../service/player-service.mts';
 import { NotFoundError } from '../service/errors.mts';
 import { createPageable } from '../service/pageable.mts';
