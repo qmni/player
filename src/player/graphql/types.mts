@@ -294,3 +294,34 @@ export type PlayerUpdateInput = {
     status?: 'ACTIVE' | 'BANNED' | 'DELETED';
     guildId?: Int;
 };
+
+export const toUpdate = (player: PlayerUpdateInput): PlayerUpdate => {
+    const {
+        username,
+        email,
+        level,
+        experience,
+        playerClass,
+        status,
+        guildId,
+    } = player;
+
+    const playerUpdate: PlayerUpdate = {
+        username,
+        email,
+        level,
+        experience,
+        playerClass,
+        status,
+    };
+
+    if (guildId !== undefined) {
+        playerUpdate.guild = {
+            connect: {
+                id: guildId,
+            },
+        };
+    }
+
+    return playerUpdate;
+};
