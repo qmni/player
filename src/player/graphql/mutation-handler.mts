@@ -110,3 +110,38 @@ const validatePlayerUpdate = (player: PlayerUpdateInput) => {
 
     logger.debug('validatePlayerUpdate: ok');
 };
+
+export const updateHandler = async (
+    input: PlayerUpdateInput,
+): Promise<UpdatePayload> => {
+    logger.debug('updateHandler: input=%o', input);
+
+    validatePlayerUpdate(input);
+
+    const playerUpdate = toUpdate(input);
+    logger.debug('updateHandler: playerUpdate=%o', playerUpdate);
+
+    let version: number | undefined;
+
+    try {
+        version = await playerWriteService.update({
+            id: toNumber(input.id),
+            player: playerUpdate,
+            version: `"${input.version}"`,
+        });
+    } catch (err) {
+        if (err instanceof NotFoundError) {
+            logger.debug('updateHandler: Kein Player gefunden.');
+            throw new GraphQLError(err.message, {
+                extensions: {
+                    code: 'BAD_USER_INPUT',
+                },
+            });
+        }
+
+        throw err;
+    }
+
+    logger.debug('updateHandler: version=%s', version);
+    return { version: toInt(version ?? 0) };
+};
