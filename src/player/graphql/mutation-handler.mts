@@ -158,3 +158,30 @@ export const deleteHandler = async (id: ID) => {
     const payload: DeletePayload = { success };
     return payload;
 };
+
+// -----------------------------------------------------------------------------
+// S e c u r i t y
+// -----------------------------------------------------------------------------
+
+export const tokenHandler = async ({
+    username,
+    password,
+}: {
+    username: string;
+    password: string;
+}) => {
+    logger.debug('tokenHandler: username=%s', username);
+
+    const token = await keycloakService.token({ username, password });
+
+    if (token === undefined) {
+        throw new GraphQLError('Fehler bei username und/oder Passwort', {
+            extensions: {
+                code: 'BAD_USER_INPUT',
+            },
+        });
+    }
+
+    logger.debug('tokenHandler: token=%o', token);
+    return token;
+};
