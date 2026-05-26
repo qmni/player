@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, test } from 'vitest';
 
-import { type PlayerNeuType } from '../../../src/player/router/player-validation.mts';
+import { type PlayerNewType } from '../../../src/player/router/player-validation.mts';
 
 import { PlayerService } from '../../../src/player/service/player-service.mts';
 
@@ -22,7 +22,7 @@ import { getToken } from '../token.mts';
 // T e s t d a t e n
 // -----------------------------------------------------------------------------
 
-const neuerPlayer: PlayerNeuType = {
+const neuerPlayer: PlayerNewType = {
     username: 'newPlayer',
     email: 'new@player.de',
     level: 10,
@@ -40,7 +40,7 @@ const neuerPlayerInvalid: Record<string, unknown> = {
     status: 'UNKNOWN',
 };
 
-const neuerPlayerUsernameExistiert: PlayerNeuType = {
+const neuerPlayerUsernameExistiert: PlayerNewType = {
     username: 'admin',
     email: 'another@player.de',
     level: 1,
@@ -49,7 +49,7 @@ const neuerPlayerUsernameExistiert: PlayerNeuType = {
     status: 'ACTIVE',
 };
 
-const neuerPlayerEmailExistiert: PlayerNeuType = {
+const neuerPlayerEmailExistiert: PlayerNewType = {
     username: 'uniquePlayer',
     email: 'admin@player.de',
     level: 1,
