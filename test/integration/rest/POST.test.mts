@@ -4,7 +4,7 @@ import { type PlayerNeuType } from '../../../src/player/router/player-validation
 
 import { PlayerService } from '../../../src/player/service/player-service.mts';
 
-import { ProblemDetails } from '../../../src/problem-details.mts';
+import { type ProblemDetails } from '../../../src/problem-details.mts';
 
 import {
     APPLICATION_JSON,
@@ -137,7 +137,7 @@ describe('POST /rest', () => {
 
         expect(detail).toHaveLength(expectedPaths.length);
 
-        const paths = detail.map((d: any) => d.path[0]);
+        const paths = (detail as any[]).map((d: any) => d.path[0]);
 
         expect(paths).toStrictEqual(
             expect.arrayContaining(expectedPaths),
