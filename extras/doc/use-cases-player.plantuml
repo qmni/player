@@ -1,4 +1,4 @@
-' Copyright (C) 2023 - present Juergen Zimmermann, Hochschule Karlsruhe
+' Copyright (C) 2026 - present Juergen Zimmermann, Hochschule Karlsruhe
 '
 ' This program is free software: you can redistribute it and/or modify
 ' it under the terms of the GNU General Public License as published by
@@ -15,19 +15,22 @@
 
 ' Preview durch <Alt>d
 
-@startuml Sequenzdiagramm
+@startuml Use Cases Player
 
 actor Gast
+actor Admin
+actor Spieler
 
-boundary "Hono App" as hono
-control "router \n (in buch-router)" as buchRouter
-control BuchService
-database buch
-
-Gast -> hono: GET
-hono -> buchRouter: router.get()
-buchRouter -> BuchService: findById()
-BuchService -> buch: [Prisma]
+rectangle player {
+    Gast --> (Player suchen)
+    Admin --> (Player suchen)
+    Admin --> (Player anlegen)
+    Admin --> (Player ändern)
+    Admin --> (Player löschen)
+    Spieler --> (Player suchen)
+    Spieler --> (Player anlegen)
+    Spieler --> (Player ändern)
+}
 
 footer (c) Jürgen Zimmermann
 
