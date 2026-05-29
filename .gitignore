@@ -46,6 +46,7 @@ generated/
 .scannerwork/
 dependency-check-report.*
 report.html
+extras/doc/html/
 
 # Lokale Datenbanken und Service-State
 *.db
