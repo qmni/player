@@ -1,6 +1,4 @@
 = Projekthandbuch Player
-:author: Hien
-:toc:
 :sectnums:
 
 == Ziel
