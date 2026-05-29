@@ -81,3 +81,12 @@ const getAdminToken = (): string => {
   return JSON.parse(response.body).access_token;
 };
 
+export function setup() {
+  const token = getAdminToken();
+  const response = http.post(dbPopulateUrl, null, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  expect(response.status).toBe(200);
+}
+
