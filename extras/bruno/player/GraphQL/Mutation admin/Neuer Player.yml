@@ -1,0 +1,55 @@
+info:
+  name: Neuer Player
+  type: graphql
+  seq: 1
+
+graphql:
+  method: POST
+  url: "{{graphqlUrl}}"
+  headers:
+    - name: Authorization
+      value: Bearer {{accessToken}}
+    - name: Accept
+      value: application/graphql-response+json
+  body:
+    query: |-
+      mutation {
+        create(
+          input: {
+            username: "graphql-player",
+            email: "graphql-player@example.com",
+            level: 12,
+            experience: 1800,
+            playerClass: ROGUE,
+            status: ACTIVE
+          }
+        ) {
+          id
+        }
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test('Body mit id', () => {
+          const { data } = res.getBody();
+          const id = parseInt(data.create.id, 10);
+          expect(id).to.be.gte(0);
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/graphql-response\+json(; charset=utf-8)?$
+    - expression: res.body.data.create.id
+      operator: isString
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

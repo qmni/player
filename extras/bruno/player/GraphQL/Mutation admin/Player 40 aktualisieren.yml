@@ -1,0 +1,50 @@
+info:
+  name: Player 40 aktualisieren
+  type: graphql
+  seq: 2
+
+graphql:
+  method: POST
+  url: "{{graphqlUrl}}"
+  headers:
+    - name: Authorization
+      value: Bearer {{accessToken}}
+    - name: Accept
+      value: application/graphql-response+json
+  body:
+    query: |-
+      mutation {
+        update(
+          input: {
+            id: "40",
+            version: 0,
+            username: "graphql-update",
+            email: "graphql-update@example.com",
+            level: 25,
+            experience: 2500,
+            playerClass: PRIEST,
+            status: ACTIVE
+          }
+        ) {
+          version
+        }
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/graphql-response\+json(; charset=utf-8)?$
+    - expression: res.body.data.update.version
+      operator: eq
+      value: 1
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
