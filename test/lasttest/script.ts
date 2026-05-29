@@ -135,3 +135,22 @@ export function postPlayer() {
   sleep(1);
 }
 
+export function queryPlayer() {
+  const id = ids[Math.floor(Math.random() * ids.length)];
+  const body = {
+    query: `
+            {
+                player(id: "${id}") {
+                    id
+                    username
+                    email
+                    level
+                    playerClass
+                    status
+                    version
+                }
+            }
+        `,
+  };
+
+
