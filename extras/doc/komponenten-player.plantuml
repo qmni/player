@@ -1,4 +1,4 @@
-' Copyright (C) 2019 - present Juergen Zimmermann, Hochschule Karlsruhe
+' Copyright (C) 2026 - present Juergen Zimmermann, Hochschule Karlsruhe
 '
 ' This program is free software: you can redistribute it and/or modify
 ' it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 
 ' Preview durch <Alt>d
 
-@startuml Komponenten
+@startuml Komponenten Player
 
 left to right direction
 
@@ -24,19 +24,16 @@ actor GraphQLClient
 
 node "Hono" {
   [Hono App]
-  [Middleware \nrolesAllowed()]
-  [Router / Handler]
-
+  [Middleware \nrolesRequired()]
+  [PlayerRouter / Handler]
+  [PlayerWriteRouter / Handler]
   [Yoga Server]
   [Resolver / Handler]
-
-  [BuchService]
-
+  [PlayerService]
+  [PlayerWriteService]
   [PrismaClient]
-
   [MailService]
 }
-
 
 cloud {
     [Prisma]
@@ -50,10 +47,9 @@ cloud {
     [nodemailer]
 }
 
-database "DB buch" {
-    [Tabelle \nbuch]
-    [Tabelle \ntitel]
-    [Tabelle \nabbildung]
+database "DB player" {
+    [Tabelle \nplayer]
+    [Tabelle \nguild]
 }
 
 node {
@@ -65,28 +61,29 @@ node {
 }
 
 RESTClient ~~> [Hono App]
-[Hono App] ..> [Middleware \nrolesAllowed()]
+[Hono App] ..> [Middleware \nrolesRequired()]
 [MailService] ~[hidden]~> [jose \nissuer]
-[Middleware \nrolesAllowed()] ~~> [jose \nissuer]
-[Middleware \nrolesAllowed()] ..> [Router / Handler]
-[Router / Handler] ..> [BuchService]
+[Middleware \nrolesRequired()] ~~> [jose \nissuer]
+[Middleware \nrolesRequired()] ..> [PlayerRouter / Handler]
+[PlayerRouter / Handler] ..> [PlayerService]
+[PlayerWriteRouter / Handler] ..> [PlayerWriteService]
 
 GraphQLClient ~~> [Hono App]
 [Hono App] ..> [Yoga Server]
 [Yoga Server] ..> [Resolver / Handler]
-[Resolver / Handler] ..> [BuchService]
+[Resolver / Handler] ..> [PlayerService]
 [Resolver / Handler] ~~> [jose \nissuer]
 
-[BuchService] ..> [PrismaClient]
+[PlayerService] ..> [PrismaClient]
+[PlayerWriteService] ..> [PrismaClient]
 
 [PrismaClient] ~~> [Prisma]
-[Prisma] ~~> [Tabelle \nbuch]
-[Prisma] ~~> [Tabelle \ntitel]
-[Prisma] ~~> [Tabelle \nabbildung]
+[Prisma] ~~> [Tabelle \nplayer]
+[Prisma] ~~> [Tabelle \nguild]
 
 [jose \nissuer] ~~> [Keycloak]
 
-[BuchService] ..> [MailService]
+[PlayerWriteService] ..> [MailService]
 [MailService] ~~> [nodemailer]
 [nodemailer] ~~> [Mailserver]
 
