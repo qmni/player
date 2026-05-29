@@ -24,17 +24,17 @@ collectDefaultMetrics();
 
 // Metrik: gesamte Anzahl an HTTP-Requests
 const httpRequestsTotal = new Counter({
-    name: 'http_requests_total',
-    help: 'Gesamte Anzahl an HTTP-Requests',
-    labelNames: ['method', 'path', 'status_code'],
+  name: 'http_requests_total',
+  help: 'Gesamte Anzahl an HTTP-Requests',
+  labelNames: ['method', 'path', 'status_code'],
 });
 
 // Metrik: Histogramm mit Dauer von HTTP-Requests
 const httpRequestDurationSeconds = new Histogram({
-    name: 'http_request_duration_seconds',
-    help: 'Dauer von HTTP-Requests in Sekunden',
-    labelNames: ['method', 'path', 'status_code'],
-    buckets: [0.1, 0.3, 0.5, 0.7, 1, 3, 5, 7, 10],
+  name: 'http_request_duration_seconds',
+  help: 'Dauer von HTTP-Requests in Sekunden',
+  labelNames: ['method', 'path', 'status_code'],
+  buckets: [0.1, 0.3, 0.5, 0.7, 1, 3, 5, 7, 10],
 });
 
 /**
@@ -44,18 +44,15 @@ const httpRequestDurationSeconds = new Histogram({
  */
 // https://hono.dev/docs/guides/middleware
 export const trackMetrics = createMiddleware(async (c: Context, next: Next) => {
-    const start = Date.now();
-    const { path, method } = c.req;
+  const start = Date.now();
+  const { path, method } = c.req;
 
-    await next();
+  await next();
 
-    const { res } = c;
-    const { status } = res;
-    const duration = (Date.now() - start) / 1000;
+  const { res } = c;
+  const { status } = res;
+  const duration = (Date.now() - start) / 1000;
 
-    httpRequestsTotal.inc({ method, path, status_code: status });
-    httpRequestDurationSeconds.observe(
-        { method, path, status_code: status },
-        duration,
-    );
+  httpRequestsTotal.inc({ method, path, status_code: status });
+  httpRequestDurationSeconds.observe({ method, path, status_code: status }, duration);
 });

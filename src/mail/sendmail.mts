@@ -25,10 +25,10 @@ import { getLogger } from '../logger/logger.mts';
 
 /** Typdefinition für das Senden einer Email. */
 export type SendMailParams = {
-    /** Subject für die Email. */
-    readonly subject: string;
-    /** Body für die Email. */
-    readonly body: string;
+  /** Subject für die Email. */
+  readonly subject: string;
+  /** Body für die Email. */
+  readonly body: string;
 };
 
 const logger = getLogger('sendmail', 'func');
@@ -43,17 +43,17 @@ const { activated, from, to } = mailConfig;
  * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
 export const sendmail = async ({ subject, body }: SendMailParams) => {
-    if (!activated) {
-        logger.warn('Mail deaktiviert');
-        return;
-    }
+  if (!activated) {
+    logger.warn('Mail deaktiviert');
+    return;
+  }
 
-    const mailOptions: SendMailOptions = { from, to, subject, html: body };
-    logger.debug('mailOptions=%o', mailOptions);
+  const mailOptions: SendMailOptions = { from, to, subject, html: body };
+  logger.debug('mailOptions=%o', mailOptions);
 
-    try {
-        await createTransport(mailConfig.options).sendMail(mailOptions); // NOSONAR
-    } catch (err) {
-        logger.warn('Fehler %o', err as object);
-    }
+  try {
+    await createTransport(mailConfig.options).sendMail(mailOptions); // NOSONAR
+  } catch (err) {
+    logger.warn('Fehler %o', err as object);
+  }
 };

@@ -9,8 +9,8 @@ const playerService = new PlayerService();
  * Container mit Singletons zur einfachen manuellen Dependency Injection.
  */
 export const container = {
-    playerService,
-    playerWriteService: new PlayerWriteService(playerService),
-    dbPopulateService: new DbPopulateService(),
-    keycloakService: new KeycloakService(),
+  playerService,
+  playerWriteService: new PlayerWriteService(playerService),
+  dbPopulateService: new DbPopulateService(),
+  keycloakService: new KeycloakService(),
 };

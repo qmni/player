@@ -1,5 +1,5 @@
-import type { Pageable } from "../service/pageable.mts";
-import type { Slice } from "../service/slice.mts";
+import { type Pageable } from '../service/pageable.mts';
+import { type Slice } from '../service/slice.mts';
 
 export type Page<T> = {
   readonly content: T[];
@@ -11,10 +11,7 @@ export type Page<T> = {
   };
 };
 
-export const createPage = <T,>(
-  slice: Slice<T>,
-  pageable: Pageable,
-): Page<T> => {
+export const createPage = <T,>(slice: Slice<T>, pageable: Pageable): Page<T> => {
   const { content, totalElements } = slice;
   const { number, size } = pageable;
 

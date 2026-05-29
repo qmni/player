@@ -28,21 +28,18 @@ const { mail } = config;
 const activated = mail?.activated === undefined || mail?.activated === true;
 
 if (mail !== undefined) {
-    if (mail.host !== undefined && typeof mail.host !== 'string') {
-        throw new TypeError('Der konfigurierte Mailserver ist kein String');
-    }
-    if (mail.port !== undefined && typeof mail.port !== 'number') {
-        throw new TypeError(
-            'Der konfigurierte Port für den Mailserver ist keine Zahl',
-        );
-    }
+  if (mail.host !== undefined && typeof mail.host !== 'string') {
+    throw new TypeError('Der konfigurierte Mailserver ist kein String');
+  }
+  if (mail.port !== undefined && typeof mail.port !== 'number') {
+    throw new TypeError('Der konfigurierte Port für den Mailserver ist keine Zahl');
+  }
 }
 // "Optional Chaining" und "Nullish Coalescing"
 const host = (mail?.host as string | undefined) ?? 'mail';
-const port = (mail?.port as number | undefined) ?? 25; // eslint-disable-line @typescript-eslint/no-magic-numbers
+const port = (mail?.port as number | undefined) ?? 25;
 const useLogger = mail?.log === true;
-const from =
-    (mail?.from as string | undefined) ?? '"Joe Doe" <Joe.Doe@acme.com>';
+const from = (mail?.from as string | undefined) ?? '"Joe Doe" <Joe.Doe@acme.com>';
 const to = (mail?.to as string | undefined) ?? '"Foo Bar" <Foo.Bar@acme.com>';
 
 /**
@@ -50,32 +47,32 @@ const to = (mail?.to as string | undefined) ?? '"Foo Bar" <Foo.Bar@acme.com>';
  * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
 export const options: Options = {
-    host,
-    port,
-    secure: false,
+  host,
+  port,
+  secure: false,
 
-    // Googlemail:
-    // service: 'gmail',
-    // auth: {
-    //     user: 'Meine.Benutzerkennung@gmail.com',
-    //     pass: 'mypassword'
-    // }
+  // Googlemail:
+  // service: 'gmail',
+  // auth: {
+  //     user: 'Meine.Benutzerkennung@gmail.com',
+  //     pass: 'mypassword'
+  // }
 
-    priority: 'normal',
-    logger: useLogger,
+  priority: 'normal',
+  logger: useLogger,
 } as const;
 
 type MailConfig = {
-    activated: boolean;
-    options: Options;
-    from: string;
-    to: string;
+  activated: boolean;
+  options: Options;
+  from: string;
+  to: string;
 };
 export const mailConfig: MailConfig = {
-    activated,
-    options,
-    from,
-    to,
+  activated,
+  options,
+  from,
+  to,
 };
 
 Object.freeze(options);
