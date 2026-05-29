@@ -265,7 +265,7 @@ Diese Zeichenkette benötigt man für die Datei `.env` sowie für _Bruno_.
 
 Im Wurzelverzeichnis des Projekts in der Datei `.env` muss man die
 Umgebungsvariable `CLIENT_SECRET` auf den Wert vom obigen _Client Secret_ aus
-_Keycloak_ setzen und ebenso in `extras\compose\buch\.env`:
+_Keycloak_ setzen und ebenso in `extras\compose\player\.env`:
 
 In der Klasse `AuthController` ist eine REST-Schnittstelle implementiert, mit
 der man durch einen POST-Request mit dem Pfad `/auth/token` einen _Access Token_

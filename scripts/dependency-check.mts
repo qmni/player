@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// oxlint-disable promise/prefer-await-to-callbacks
 // Copyright (C) 2023 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -27,7 +28,7 @@ import { platform } from 'node:os';
 import { resolve } from 'node:path';
 
 const nvdApiKey = '47fbc0a4-9240-4fda-9a26-d7d5624c16bf';
-const project = 'buch';
+const project = 'player';
 
 let rootDir;
 let baseScript = 'dependency-check';
@@ -35,68 +36,62 @@ let baseScript = 'dependency-check';
 // https://nodejs.org/api/os.html#osplatform
 const betriebssystem = platform(); // win32, linux, ...
 if (betriebssystem === 'win32') {
-    rootDir = resolve('C:/');
-    baseScript += '.bat';
+  rootDir = resolve('C:/');
+  baseScript += '.bat';
 } else {
-    rootDir = resolve('/');
+  rootDir = resolve('/');
 }
-const script = resolve(
-    rootDir,
-    'Zimmermann',
-    'dependency-check',
-    'bin',
-    baseScript,
-);
+const script = resolve(rootDir, 'Zimmermann', 'dependency-check', 'bin', baseScript);
 console.log(`script=${script}`);
 
 const dataPath = resolve(rootDir, 'Zimmermann', 'dependency-check-data');
 const reportPath = '.';
 
-let options = `--nvdApiKey ${nvdApiKey} --project ${project} `.concat(
-    `--scan .. --suppression dependency-check-suppression.xml `,
-    `--out ${reportPath} --data ${dataPath} `,
-    // https://jeremylong.github.io/DependencyCheck/dependency-check-cli/arguments.html
-    // dependency-check.bat --advancedHelp
-    '--nodeAuditSkipDevDependencies ',
-    '--nodePackageSkipDevDependencies ',
-    '--disableArchive ',
-    '--disableAssembly ',
-    '--disableAutoconf ',
-    '--disableBundleAudit ',
-    '--disableCarthageAnalyzer ',
-    '--disableCentral ',
-    '--disableCentralCache ',
-    '--disableCmake ',
-    '--disableCocoapodsAnalyzer ',
-    '--disableComposer ',
-    '--disableCpan ',
-    '--disableDart ',
-    '--disableGolangDep ',
-    '--disableGolangMod ',
-    '--disableJar ',
-    '--disableMavenInstall ',
-    '--disableMSBuild ',
-    '--disableNugetconf ',
-    '--disableNuspec ',
-    '--disableOssIndex ',
-    '--disablePip ',
-    '--disablePipfile ',
-    '--disablePoetry ',
-    '--disablePyDist ',
-    '--disablePyPkg ',
-    '--disableRubygems ',
-    '--disableSwiftPackageManagerAnalyzer ',
-    '--disableSwiftPackageResolvedAnalyzer ',
-    '--disableYarnAudit',
+const options = `--nvdApiKey ${nvdApiKey} --project ${project} `.concat(
+  `--scan .. --suppression dependency-check-suppression.xml `,
+  `--out ${reportPath} --data ${dataPath} `,
+  // https://jeremylong.github.io/DependencyCheck/dependency-check-cli/arguments.html
+  // dependency-check.bat --advancedHelp
+  '--nodeAuditSkipDevDependencies ',
+  '--nodePackageSkipDevDependencies ',
+  '--disableArchive ',
+  '--disableAssembly ',
+  '--disableAutoconf ',
+  '--disableBundleAudit ',
+  '--disableCarthageAnalyzer ',
+  '--disableCentral ',
+  '--disableCentralCache ',
+  '--disableCmake ',
+  '--disableCocoapodsAnalyzer ',
+  '--disableComposer ',
+  '--disableCpan ',
+  '--disableDart ',
+  '--disableGolangDep ',
+  '--disableGolangMod ',
+  '--disableJar ',
+  '--disableMavenInstall ',
+  '--disableMSBuild ',
+  '--disableNugetconf ',
+  '--disableNuspec ',
+  '--disableOssIndex ',
+  '--disablePip ',
+  '--disablePipfile ',
+  '--disablePoetry ',
+  '--disablePyDist ',
+  '--disablePyPkg ',
+  '--disableRubygems ',
+  '--disableSwiftPackageManagerAnalyzer ',
+  '--disableSwiftPackageResolvedAnalyzer ',
+  '--disableYarnAudit',
 );
 console.log(`options=${options}`);
 console.log('');
 
 // https://nodejs.org/api/child_process.html#spawning-bat-and-cmd-files-on-windows
 exec(`${script} ${options}`, (err, stdout) => {
-    if (err) {
-        console.error(err);
-        return;
-    }
-    console.log(stdout);
+  if (err) {
+    console.error(err);
+    return;
+  }
+  console.log(stdout);
 });

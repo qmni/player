@@ -1,10 +1,6 @@
 {
   "extends": "../../tsconfig.json",
-  "include": [
-    "script.ts",
-    "isbn_generate.ts",
-    "../../src/player/router/player-validation.mts"
-  ],
+  "include": ["script.ts", "isbn_generate.ts", "../../src/player/router/player-validation.mts"],
   "compilerOptions": {
     // https://www.typescriptlang.org/tsconfig/#isolatedModules
     "isolatedModules": true,

@@ -1,3 +1,4 @@
+// oxlint-disable sort-imports
 // Copyright (C) 2016 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -18,17 +19,16 @@
  * Verschicken von Emails.
  * @packageDocumentation
  */
-
-import { type SendMailOptions, createTransport } from 'nodemailer';
 import { mailConfig } from '../config/mail.mts';
 import { getLogger } from '../logger/logger.mts';
+import { type SendMailOptions, createTransport } from 'nodemailer';
 
 /** Typdefinition für das Senden einer Email. */
 export type SendMailParams = {
-    /** Subject für die Email. */
-    readonly subject: string;
-    /** Body für die Email. */
-    readonly body: string;
+  /** Subject für die Email. */
+  readonly subject: string;
+  /** Body für die Email. */
+  readonly body: string;
 };
 
 const logger = getLogger('sendmail', 'func');
@@ -43,17 +43,17 @@ const { activated, from, to } = mailConfig;
  * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
 export const sendmail = async ({ subject, body }: SendMailParams) => {
-    if (!activated) {
-        logger.warn('Mail deaktiviert');
-        return;
-    }
+  if (!activated) {
+    logger.warn('Mail deaktiviert');
+    return;
+  }
 
-    const mailOptions: SendMailOptions = { from, to, subject, html: body };
-    logger.debug('mailOptions=%o', mailOptions);
+  const mailOptions: SendMailOptions = { from, to, subject, html: body };
+  logger.debug('mailOptions=%o', mailOptions);
 
-    try {
-        await createTransport(mailConfig.options).sendMail(mailOptions); // NOSONAR
-    } catch (err) {
-        logger.warn('Fehler %o', err as object);
-    }
+  try {
+    await createTransport(mailConfig.options).sendMail(mailOptions); // NOSONAR
+  } catch (err) {
+    logger.warn('Fehler %o', err as object);
+  }
 };

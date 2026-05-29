@@ -13,13 +13,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { describe, expect, test } from "vitest";
+import { describe, expect, test } from 'vitest';
 
 // -----------------------------------------------------------------------------
 // T e s t   S u i t e
 // -----------------------------------------------------------------------------
-describe("simple", () => {
-  test("true === true", () => {
+describe('simple', () => {
+  test('true === true', () => {
     expect(true).toBe(true);
   });
 });

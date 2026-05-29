@@ -15,3 +15,10 @@ variables:
   - secret: true
     name: playerPassword
     value: CHANGE_ME
+  - secret: true
+    name: accessToken
+    value: PASTE_ACCESS_TOKEN_HERE
+  - name: playerId
+    value: "1"
+  - name: playerVersion
+    value: "0"

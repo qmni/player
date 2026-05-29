@@ -1,16 +1,18 @@
-import Bun from 'bun'; // eslint-disable-line @typescript-eslint/naming-convention
-import process from 'node:process';
+// oxlint-disable no-void
+// oxlint-disable sort-imports
 import { app } from './app.mts';
 import { env } from './config/env.mts';
 import { connectDB, disconnectDB } from './config/prisma-client.mts';
 import { serverConfig } from './config/server.mts';
 import { container } from './container.mts';
 import { banner } from './logger/banner.mts';
+import Bun from 'bun';
+import process from 'node:process';
 
 const { NODE_ENV } = env;
 
 if (NODE_ENV === 'development' || NODE_ENV === 'test') {
-    process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
+  process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 }
 
 const { fetch } = app;
@@ -22,20 +24,20 @@ await container.dbPopulateService.populate();
 Bun.serve({ port: portHttp, fetch });
 
 Bun.serve({
-    port,
-    fetch,
-    tls: {
-        key,
-        cert,
-    },
+  port,
+  fetch,
+  tls: {
+    key,
+    cert,
+  },
 });
 
 await banner();
 
 process.on('SIGINT', () => {
-    void (async () => {
-        await disconnectDB();
-        console.log('Der Server wird heruntergefahren.');
-        process.exit(0);
-    })();
+  void (async () => {
+    await disconnectDB();
+    console.log('Der Server wird heruntergefahren.');
+    process.exit(0);
+  })();
 });

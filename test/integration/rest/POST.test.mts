@@ -1,11 +1,10 @@
-import { beforeAll, describe, expect, test } from "vitest";
-
-import { type PlayerNewType } from "../../../src/player/router/player-validation.mts";
-
-import { PlayerService } from "../../../src/player/service/player-service.mts";
-
-import { type ProblemDetails } from "../../../src/problem-details.mts";
-
+// oxlint-disable id-length
+// oxlint-disable max-lines-per-function
+// oxlint-disable sort-imports
+import { beforeAll, describe, expect, test } from 'vitest';
+import { type PlayerNewType } from '../../../src/player/router/player-validation.mts';
+import { PlayerService } from '../../../src/player/service/player-service.mts';
+import { type ProblemDetails } from '../../../src/problem-details.mts';
 import {
   APPLICATION_JSON,
   AUTHORIZATION,
@@ -14,62 +13,61 @@ import {
   LOCATION,
   POST,
   restURL,
-} from "../constants.mts";
-
-import { getToken } from "../token.mts";
+} from '../constants.mts';
+import { getToken } from '../token.mts';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
 // -----------------------------------------------------------------------------
 
 const neuerPlayer: PlayerNewType = {
-  username: "newPlayer",
-  email: "new@player.de",
+  username: 'newPlayer',
+  email: 'new@player.de',
   level: 10,
   experience: 1000,
-  playerClass: "MAGE",
-  status: "ACTIVE",
+  playerClass: 'MAGE',
+  status: 'ACTIVE',
 };
 
 const neuerPlayerInvalid: Record<string, unknown> = {
-  username: "",
-  email: "ungueltig",
+  username: '',
+  email: 'ungueltig',
   level: -1,
   experience: -100,
-  playerClass: "INVALID",
-  status: "UNKNOWN",
+  playerClass: 'INVALID',
+  status: 'UNKNOWN',
 };
 
 const neuerPlayerUsernameExistiert: PlayerNewType = {
-  username: "player1",
-  email: "another@player.de",
+  username: 'player1',
+  email: 'another@player.de',
   level: 1,
   experience: 100,
-  playerClass: "WARRIOR",
-  status: "ACTIVE",
+  playerClass: 'WARRIOR',
+  status: 'ACTIVE',
 };
 
 const neuerPlayerEmailExistiert: PlayerNewType = {
-  username: "uniquePlayer",
-  email: "player1@example.com",
+  username: 'uniquePlayer',
+  email: 'player1@example.com',
   level: 1,
   experience: 100,
-  playerClass: "ROGUE",
-  status: "ACTIVE",
+  playerClass: 'ROGUE',
+  status: 'ACTIVE',
 };
 
 // -----------------------------------------------------------------------------
 // T e s t s
 // -----------------------------------------------------------------------------
 
-describe("POST /rest", () => {
+describe('POST /rest', () => {
   let token: string;
 
   beforeAll(async () => {
-    token = await getToken("admin", "p");
+    token = await getToken('admin', 'p');
   });
 
-  test("Neuer Player", async () => {
+  test('Neuer Player', async () => {
     const headers = new Headers();
 
     headers.append(CONTENT_TYPE, APPLICATION_JSON);
@@ -92,7 +90,7 @@ describe("POST /rest", () => {
 
     expect(location).toBeDefined();
 
-    const indexLastSlash = location?.lastIndexOf("/") ?? -1;
+    const indexLastSlash = location?.lastIndexOf('/') ?? -1;
 
     expect(indexLastSlash).not.toBe(-1);
 
@@ -100,24 +98,17 @@ describe("POST /rest", () => {
 
     expect(idStr).toBeDefined();
 
-    expect(PlayerService.ID_PATTERN.test(idStr ?? "")).toBe(true);
+    expect(PlayerService.ID_PATTERN.test(idStr ?? '')).toBe(true);
   });
 
-  test("Neuer Player mit ungueltigen Daten", async () => {
+  test('Neuer Player mit ungueltigen Daten', async () => {
     const headers = new Headers();
 
     headers.append(CONTENT_TYPE, APPLICATION_JSON);
 
     headers.append(AUTHORIZATION, `${BEARER} ${token}`);
 
-    const expectedPaths = [
-      "username",
-      "email",
-      "level",
-      "experience",
-      "playerClass",
-      "status",
-    ];
+    const expectedPaths = ['username', 'email', 'level', 'experience', 'playerClass', 'status'];
 
     const response = await fetch(restURL, {
       method: POST,
@@ -142,7 +133,7 @@ describe("POST /rest", () => {
     expect(paths).toStrictEqual(expect.arrayContaining(expectedPaths));
   });
 
-  test("Neuer Player, aber Username existiert bereits", async () => {
+  test('Neuer Player, aber Username existiert bereits', async () => {
     const headers = new Headers();
 
     headers.append(CONTENT_TYPE, APPLICATION_JSON);
@@ -161,10 +152,10 @@ describe("POST /rest", () => {
 
     const body = (await response.json()) as ProblemDetails;
 
-    expect(body.detail).toStrictEqual(expect.stringContaining("Username"));
+    expect(body.detail).toStrictEqual(expect.stringContaining('Username'));
   });
 
-  test("Neuer Player, aber Email existiert bereits", async () => {
+  test('Neuer Player, aber Email existiert bereits', async () => {
     const headers = new Headers();
 
     headers.append(CONTENT_TYPE, APPLICATION_JSON);
@@ -183,10 +174,10 @@ describe("POST /rest", () => {
 
     const body = (await response.json()) as ProblemDetails;
 
-    expect(body.detail).toStrictEqual(expect.stringContaining("E-Mail"));
+    expect(body.detail).toStrictEqual(expect.stringContaining('E-Mail'));
   });
 
-  test.concurrent("Neuer Player, aber ohne Token", async () => {
+  test.concurrent('Neuer Player, aber ohne Token', async () => {
     const { status } = await fetch(restURL, {
       method: POST,
       body: JSON.stringify(neuerPlayer),
@@ -195,7 +186,7 @@ describe("POST /rest", () => {
     expect(status).toBe(401);
   });
 
-  test.concurrent("Neuer Player, aber mit falschem Token", async () => {
+  test.concurrent('Neuer Player, aber mit falschem Token', async () => {
     const headers = new Headers();
 
     headers.append(CONTENT_TYPE, APPLICATION_JSON);

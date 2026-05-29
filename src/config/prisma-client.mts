@@ -1,3 +1,7 @@
+// oxlint-disable id-length
+// oxlint-disable sort-imports
+import { PrismaClient } from '../generated/prisma/client.ts';
+import { getLogger } from '../logger/logger.mts';
 // Copyright (C) 2025 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -12,13 +16,10 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-
 import { PrismaPg } from '@prisma/adapter-pg';
 import { prismaQueryInsights } from '@prisma/sqlcommenter-query-insights';
-import process from 'node:process';
 import { styleText } from 'node:util';
-import { PrismaClient } from '../generated/prisma/client.ts';
-import { getLogger } from '../logger/logger.mts';
+import process from 'node:process';
 
 /**
  * Das Modul besteht aus dem Objekt {@linkcode prismaClient} als DB-Client
@@ -29,43 +30,43 @@ import { getLogger } from '../logger/logger.mts';
 const logger = getLogger('prisma-client', 'file');
 
 // PrismaClient passend zur Umgebungsvariable DATABASE_URL in ".env"
-// d.h. mit PostgreSQL-User "buch" und Schema "buch"
+// d.h. mit der konfigurierten PostgreSQL-Datenbank aus DATABASE_URL
 export const adapter = new PrismaPg({
-    connectionString: process.env['DATABASE_URL'],
+  connectionString: process.env['DATABASE_URL'],
 });
 
 let tmpClient: PrismaClient;
 
 if (logger.isLevelEnabled('debug')) {
-    const debugClient = new PrismaClient({
-        adapter,
-        errorFormat: 'pretty',
-        log: [
-            {
-                // siehe unten: debugClient.$on('query', ...);
-                emit: 'event',
-                level: 'query',
-            },
-            'info',
-            'warn',
-            'error',
-        ],
-        // Kommentar zu Log-Ausgabe generieren:
-        // /*prismaQuery='Buch.findMany%3A... mit base64-Codierung
-        // https://www.prisma.io/docs/orm/reference/prisma-client-reference#comments
-        comments: [prismaQueryInsights()],
-    });
+  const debugClient = new PrismaClient({
+    adapter,
+    errorFormat: 'pretty',
+    log: [
+      {
+        // siehe unten: debugClient.$on('query', ...);
+        emit: 'event',
+        level: 'query',
+      },
+      'info',
+      'warn',
+      'error',
+    ],
+    // Kommentar zu Log-Ausgabe generieren:
+    // /*prismaQuery='Player.findMany%3A... mit base64-Codierung
+    // https://www.prisma.io/docs/orm/reference/prisma-client-reference#comments
+    comments: [prismaQueryInsights()],
+  });
 
-    debugClient.$on('query', (e) => {
-        // console.log(), weil der Pino-Logger asynchron ist
-        const message = styleText(['black', 'bgWhite'], 'Query:');
-        console.log(`${message} ${e.query}`);
-    });
+  debugClient.$on('query', (e) => {
+    // console.log(), weil der Pino-Logger asynchron ist
+    const message = styleText(['black', 'bgWhite'], 'Query:');
+    console.log(`${message} ${e.query}`);
+  });
 
-    tmpClient = debugClient;
+  tmpClient = debugClient;
 } else {
-    const prodClient = new PrismaClient({ adapter });
-    tmpClient = prodClient;
+  const prodClient = new PrismaClient({ adapter });
+  tmpClient = prodClient;
 }
 
 /**
@@ -79,8 +80,8 @@ export const prismaClient = tmpClient;
  * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
 export const connectDB = async () => {
-    await prismaClient.$connect();
-    logger.info('Verbindung mit der DB ist hergestellt.');
+  await prismaClient.$connect();
+  logger.info('Verbindung mit der DB ist hergestellt.');
 };
 
 /**
@@ -88,6 +89,6 @@ export const connectDB = async () => {
  * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
 export const disconnectDB = async () => {
-    await prismaClient.$disconnect();
-    logger.info('Verbindung mit der DB ist getrennt.');
+  await prismaClient.$disconnect();
+  logger.info('Verbindung mit der DB ist getrennt.');
 };

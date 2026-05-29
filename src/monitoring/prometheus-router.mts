@@ -22,8 +22,8 @@ import { register } from 'prom-client';
  */
 export const router = new Hono();
 
-router.get('/', async (c) => {
-    return c.text(await register.metrics(), 200, {
-        'Content-Type': register.contentType,
-    });
-});
+router.get('/', async (c) =>
+  c.text(await register.metrics(), 200, {
+    'Content-Type': register.contentType,
+  }),
+);

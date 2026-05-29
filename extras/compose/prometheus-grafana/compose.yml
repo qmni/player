@@ -95,8 +95,7 @@ services:
     container_name: grafana
     cap_drop: [ALL]
     healthcheck:
-      test:
-        ["CMD", "wget", "--spider", "-q", "http://localhost:3000/api/health"]
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/api/health"]
       interval: 30s
       timeout: 5s
       retries: 3

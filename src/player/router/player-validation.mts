@@ -1,4 +1,6 @@
-import { z } from "zod";
+// oxlint-disable no-magic-numbers
+// oxlint-disable require-unicode-regexp
+import { z } from 'zod';
 
 export const MAX_PLAYER_LEVEL = 100;
 
@@ -9,8 +11,8 @@ const PlayerComplete = z.strictObject({
   email: z.email().max(255),
   level: z.int().min(1).max(MAX_PLAYER_LEVEL),
   experience: z.int().min(0),
-  playerClass: z.enum(["WARRIOR", "MAGE", "ROGUE", "PRIEST", "HUNTER"]),
-  status: z.enum(["ACTIVE", "BANNED", "DELETED"]).optional(),
+  playerClass: z.enum(['WARRIOR', 'MAGE', 'ROGUE', 'PRIEST', 'HUNTER']),
+  status: z.enum(['ACTIVE', 'BANNED', 'DELETED']).optional(),
   guildId: z.int().positive().optional(),
 });
 
