@@ -17,24 +17,21 @@
 
 import { type GraphQLQuery } from './graphql.mts';
 import {
-    ACCEPT,
-    APPLICATION_JSON,
-    CONTENT_TYPE,
-    GRAPHQL_RESPONSE_JSON,
-    POST,
-    graphqlURL,
+  ACCEPT,
+  APPLICATION_JSON,
+  CONTENT_TYPE,
+  GRAPHQL_RESPONSE_JSON,
+  POST,
+  graphqlURL,
 } from '../constants.mts';
 
-export const getToken = async (
-    username: string,
-    password: string,
-): Promise<string> => {
-    const headers = new Headers();
-    headers.append(CONTENT_TYPE, APPLICATION_JSON);
-    headers.append(ACCEPT, GRAPHQL_RESPONSE_JSON);
+export const getToken = async (username: string, password: string): Promise<string> => {
+  const headers = new Headers();
+  headers.append(CONTENT_TYPE, APPLICATION_JSON);
+  headers.append(ACCEPT, GRAPHQL_RESPONSE_JSON);
 
-    const query: GraphQLQuery = {
-        query: `
+  const query: GraphQLQuery = {
+    query: `
             mutation {
                 token(
                     username: "${username}",
@@ -44,20 +41,20 @@ export const getToken = async (
                 }
             }
         `,
-    };
+  };
 
-    const response = await fetch(graphqlURL, {
-        method: POST,
-        body: JSON.stringify(query),
-        headers,
-    });
+  const response = await fetch(graphqlURL, {
+    method: POST,
+    body: JSON.stringify(query),
+    headers,
+  });
 
-    const body = (await response.json()) as {
-        data: { token: { access_token: string } };
-    };
-    const { access_token } = body.data.token;
-    if (access_token === undefined || typeof access_token !== 'string') {
-        throw new Error('Der Token fuer GraphQL ist kein String');
-    }
-    return access_token;
+  const body = (await response.json()) as {
+    data: { token: { access_token: string } };
+  };
+  const { access_token } = body.data.token;
+  if (access_token === undefined || typeof access_token !== 'string') {
+    throw new Error('Der Token fuer GraphQL ist kein String');
+  }
+  return access_token;
 };
