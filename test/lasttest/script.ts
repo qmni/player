@@ -27,3 +27,48 @@ const rampUpDuration = "5s";
 const steadyDuration = "20s";
 const rampDownDuration = "5s";
 
+export const options: Options = {
+  batchPerHost: 20,
+  scenarios: {
+    get_player_by_id: {
+      exec: "getPlayerById",
+      executor: "ramping-vus",
+      stages: [
+        { target: 3, duration: rampUpDuration },
+        { target: 3, duration: steadyDuration },
+        { target: 0, duration: rampDownDuration },
+      ],
+    },
+    get_players_by_username: {
+      exec: "getPlayersByUsername",
+      executor: "ramping-vus",
+      stages: [
+        { target: 5, duration: rampUpDuration },
+        { target: 5, duration: steadyDuration },
+        { target: 0, duration: rampDownDuration },
+      ],
+    },
+    post_player: {
+      exec: "postPlayer",
+      executor: "ramping-vus",
+      stages: [
+        { target: 2, duration: rampUpDuration },
+        { target: 2, duration: steadyDuration },
+        { target: 0, duration: rampDownDuration },
+      ],
+    },
+    graphql_player: {
+      exec: "queryPlayer",
+      executor: "ramping-vus",
+      stages: [
+        { target: 2, duration: rampUpDuration },
+        { target: 2, duration: steadyDuration },
+        { target: 0, duration: rampDownDuration },
+      ],
+    },
+  },
+  tlsAuth: [{ cert, key }],
+  tlsVersion: http.TLS_1_3,
+  insecureSkipTLSVerify: true,
+};
+
