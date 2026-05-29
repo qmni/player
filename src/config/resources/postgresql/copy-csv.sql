@@ -15,9 +15,7 @@
 
 -- Aufruf:   psql --dbname=buch --username=postgres --file=/init/buch/sql/copy-csv.sql
 
-SET search_path TO buch;
 
--- https://www.postgresql.org/docs/current/sql-copy.html
-COPY buch FROM '/init/buch/csv/buch.csv' (FORMAT csv, DELIMITER ';', HEADER true);
-COPY titel FROM '/init/buch/csv/titel.csv' (FORMAT csv, DELIMITER ';', HEADER true);
-COPY abbildung FROM '/init/buch/csv/abbildung.csv' (FORMAT csv, DELIMITER ';', HEADER true);
+-- Passe die Pfade ggf. an deine CSV-Dateien an!
+COPY "guild" FROM '/init/guild.csv' (FORMAT csv, DELIMITER ';', HEADER true);
+COPY "player" FROM '/init/player.csv' (FORMAT csv, DELIMITER ';', HEADER true);
