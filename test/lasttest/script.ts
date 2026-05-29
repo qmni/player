@@ -99,3 +99,12 @@ export function getPlayerById() {
   sleep(1);
 }
 
+export function getPlayersByUsername() {
+  const username = usernames[Math.floor(Math.random() * usernames.length)];
+  const response = http.get(`${restUrl}?username=${username}`);
+
+  expect(response.status).toBe(200);
+  expect(response.headers["Content-Type"]).toContain("application/json");
+  sleep(1);
+}
+
