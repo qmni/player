@@ -5,10 +5,9 @@ import { type PlayerMitGuild, PlayerService } from './player-service.mts';
 import { type Pageable } from './pageable.mts';
 import { type Suchparameter } from './suchparameter.mts';
 
-const { findManyMock, countMock } = vi.hoisted(() => ({
-    findManyMock: vi.fn<PrismaClient['player']['findMany']>(),
-    countMock: vi.fn<PrismaClient['player']['count']>(),
-}));
+
+const findManyMock = vi.fn<PrismaClient['player']['findMany']>();
+const countMock = vi.fn<PrismaClient['player']['count']>();
 
 vi.mock('../../config/prisma-client.mts', () => ({
     prismaClient: {

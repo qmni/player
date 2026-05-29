@@ -7,14 +7,11 @@ import {
     PlayerWriteService,
 } from './player-write-service.mts';
 
-const { createMock, countMock, transactionMock, sendmailMock } = vi.hoisted(
-    () => ({
-        createMock: vi.fn<Prisma.PlayerDelegate['create']>(),
-        countMock: vi.fn<Prisma.PlayerDelegate['count']>(),
-        transactionMock: vi.fn(),
-        sendmailMock: vi.fn(),
-    }),
-);
+
+const createMock = vi.fn<Prisma.PlayerDelegate['create']>();
+const countMock = vi.fn<Prisma.PlayerDelegate['count']>();
+const transactionMock = vi.fn();
+const sendmailMock = vi.fn();
 
 vi.mock('../../config/prisma-client.mts', () => ({
     prismaClient: {
