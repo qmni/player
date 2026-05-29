@@ -7,6 +7,10 @@ request:
   variables:
     - name: baseUrl
       value: https://localhost:3000
+    - name: restUrl
+      value: "{{baseUrl}}/rest/player"
+    - name: graphqlUrl
+      value: "{{baseUrl}}/graphql"
     - name: keycloakUrl
       value: https://localhost:8843
     - name: realm
