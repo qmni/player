@@ -43,19 +43,20 @@ IMPORTANT: Copyright (C) 2020 - present Jürgen Zimmermann, Hochschule Karlsruhe
 
 Sed porttitor lectus nibh. Nulla porttitor accumsan tincidunt.
 
+
 .Use Cases
-[plantuml,use-cases,svg]
+[plantuml,use-cases-player,svg]
 ----
-include::use-cases.plantuml[]
+include::use-cases-player.plantuml[]
 ----
 
 Quisque velit nisi, pretium ut lacinia in, elementum id enim. Nulla porttitor
 accumsan tincidunt.
 
 .Komponentendiagramm
-[plantuml,komponenten,svg]
+[plantuml,komponenten-player,svg]
 ----
-include::komponenten.plantuml[]
+include::komponenten-player.plantuml[]
 ----
 
 === Die REST-Schnittstelle
@@ -67,46 +68,46 @@ cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit
 amet ligula.
 
 .Router für Lesezugriffe an der REST-Schnittstelle
-[plantuml,buch-router,svg]
+[plantuml,player-router,svg]
 ----
-include::buch-router.plantuml[]
+include::player-router.plantuml[]
 ----
 
 Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Donec
 sollicitudin molestie malesuada.
 
 ."Sequenzdiagramm" mit den Methodenaufrufen
-[plantuml,sequenzdiagramm,svg]
+[plantuml,sequenzdiagramm-player,svg]
 ----
-include::sequenzdiagramm.plantuml[]
+include::sequenzdiagramm-player.plantuml[]
 ----
 
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
 tempor invidunt ut.
 
 .Router für Schreibzugriffe an der REST-Schnittstelle
-[plantuml,buch-write-router,svg]
+[plantuml,player-write-router,svg]
 ----
-include::buch-write-router.plantuml[]
+include::player-write-router.plantuml[]
 ----
 
 === Die Geschäftslogik
 
 Donec rutrum congue leo eget malesuada. Donec rutrum congue leo eget malesuada.
 
-."BuchService" von der Geschäftslogik
-[plantuml,BuchService,svg]
+."PlayerService" von der Geschäftslogik
+[plantuml,PlayerService,svg]
 ----
-include::BuchService.plantuml[]
+include::PlayerService.plantuml[]
 ----
 
 Pellentesque in ipsum id orci porta dapibus. Donec rutrum congue leo eget
 malesuada.
 
-."BuchWriteService" von der Geschäftslogik
-[plantuml,BuchWriteService,svg]
+."PlayerWriteService" von der Geschäftslogik
+[plantuml,PlayerWriteService,svg]
 ----
-include::BuchWriteService.plantuml[]
+include::PlayerWriteService.plantuml[]
 ----
 
 === ER-Diagramm
@@ -114,9 +115,9 @@ include::BuchWriteService.plantuml[]
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
 .ER-Diagramm
-[plantuml,ER-Diagramm,svg]
+[plantuml,ER-Diagramm-Player,svg]
 ----
-include::ER-Diagramm.plantuml[]
+include::ER-Diagramm-Player.plantuml[]
 ----
 
 == Programmierrichtlinien für TypeScript und JavaScript
