@@ -41,8 +41,8 @@
     - [docker sbom](#docker-sbom)
   - [Docker Compose](#docker-compose)
 - [Statische Codeanalyse und Formattierer](#statische-codeanalyse-und-formatierer)
-  - [ESLint](#eslint)
-  - [Prettier](#prettier)
+  - [Oxlint](#oxlint)
+  - [Oxfmt](#oxfmt)
   - [SonarQube](#sonarqube)
 - [Sicherheitslücken](#sicherheitslücken)
   - [bun audit](#bun-audit)
@@ -88,7 +88,7 @@ Beim Starten des Appservers wird außerdem mit _Prisma_ die DB-Verbindung
 aufgebaut. Der Benutzername und das Passwort sind in der Datei
 `src\config\db.ts` auf `admin` und `p` voreingestellt. Durch die Property
 `db.populate` in `src\config\resources\app.toml` wird festgelegt, ob die
-DB `buch` neu geladen wird.
+DB neu geladen wird.
 
 ---
 
@@ -173,9 +173,9 @@ Mit dem Unterkommando `history` kann man ein Docker-Image und die einzelnen Laye
 inspizieren:
 
 ```shell
-    docker history juergenzimmermann/buch:2026.4.1-hardened
-    docker history juergenzimmermann/buch:2026.4.1-trixie
-    docker history juergenzimmermann/buch:2026.4.1-alpine
+    docker history juergenzimmermann/player:2026.4.1-hardened
+    docker history juergenzimmermann/player:2026.4.1-trixie
+    docker history juergenzimmermann/player:2026.4.1-alpine
 ```
 
 #### docker inspect
@@ -184,9 +184,9 @@ Mit dem Unterkommando `inspect` kann man die Metadaten, z.B. Labels, zu einem
 Image inspizieren:
 
 ```shell
-    docker inspect juergenzimmermann/buch:2026.4.1-hardened
-    docker inspect juergenzimmermann/buch:2026.4.1-trixie
-    docker inspect juergenzimmermann/buch:2026.4.1-alpine
+    docker inspect juergenzimmermann/player:2026.4.1-hardened
+    docker inspect juergenzimmermann/player:2026.4.1-trixie
+    docker inspect juergenzimmermann/player:2026.4.1-alpine
 ```
 
 #### docker sbom
@@ -196,9 +196,9 @@ inspizieren, welche Bestandteilen in einem Docker-Images enthalten sind, z.B.
 npm-Packages oder Debian-Packages.
 
 ```shell
-    docker sbom juergenzimmermann/buch:2026.4.1-hardened
-    docker sbom juergenzimmermann/buch:2026.4.1-trixie
-    docker sbom juergenzimmermann/buch:2026.4.1-alpine
+    docker sbom juergenzimmermann/player:2026.4.1-hardened
+    docker sbom juergenzimmermann/player:2026.4.1-trixie
+    docker sbom juergenzimmermann/player:2026.4.1-alpine
 ```
 
 ### Docker Compose
@@ -209,14 +209,14 @@ Trixie (13) Slim_ folgendermaßen starten und später in einer weiteren
 PowerShell herunterfahren.
 
 ```shell
-    cd extras\compose\buch
+    cd extras\compose\player
 
-    # Shell fuer buch-Server mit Trixie-Image zzgl. DB-Server und Mailserver
+    # Shell fuer Player-Server mit Trixie-Image zzgl. DB-Server und Mailserver
     docker compose up
 
     # Nur zur Fehlersuche: weitere Shell für bash/ash bei Trixie oder Alpine
-    cd extras\compose\buch
-    docker compose exec buch bash
+    cd extras\compose\player
+    docker compose exec player bash
         id
         env
         exit
@@ -229,8 +229,8 @@ PowerShell herunterfahren.
         nslookup postgres
         exit
 
-    # Shell: buch-Server einschl. DB-Server und Mailserver herunterfahren
-    cd extras\compose\buch
+    # Shell: Player-Server einschl. DB-Server und Mailserver herunterfahren
+    cd extras\compose\player
     docker compose down
 ```
 
@@ -238,22 +238,22 @@ PowerShell herunterfahren.
 
 ## Statische Codeanalyse und Formatierer
 
-### ESLint
+### Oxlint
 
-_ESLint_ wird durch `eslint.config.mts` konfiguriert und durch folgendes Skript
+_Oxlint_ wird durch `oxlint.config.ts` konfiguriert und durch folgendes Skript
 ausgeführt:
 
 ```shell
-    bun run eslint
+    bun run lint
 ```
 
-### Prettier
+### Oxfmt
 
-`Prettier` ist ein Formatierer, der durch `prettier.config.mts` konfiguriert und
+`Oxfmt` ist ein Formatierer, der durch `oxfmt.config.ts` konfiguriert und
 durch folgendes Skript ausgeführt wird:
 
 ```shell
-    bun run prettier
+    bun run fmt
 ```
 
 ### SonarQube
@@ -296,9 +296,9 @@ groben Überblick verschaffen, wieviele Sicherheitslücken in den Bibliotheken i
 Image enthalten sind:
 
 ```shell
-    docker scout quickview juergenzimmermann/buch:2026.4.1-hardened
-    docker scout quickview juergenzimmermann/buch:2026.4.1-trixie
-    docker scout quickview juergenzimmermann/buch:2026.4.1-alpine
+    docker scout quickview juergenzimmermann/player:2026.4.1-hardened
+    docker scout quickview juergenzimmermann/player:2026.4.1-trixie
+    docker scout quickview juergenzimmermann/player:2026.4.1-alpine
 ```
 
 Dabei bedeutet:
@@ -315,8 +315,8 @@ Die Details zu den CVE-Records im Image kann man durch das Unterkommando `cves`
 von _Scout_ auflisten:
 
 ```shell
-    docker scout cves juergenzimmermann/buch:2026.4.1-hardened
-    docker scout cves --format only-packages juergenzimmermann/buch:2026.4.1-hardened
+    docker scout cves juergenzimmermann/player:2026.4.1-hardened
+    docker scout cves --format only-packages juergenzimmermann/player:2026.4.1-hardened
 ```
 
 Statt der Kommandozeile kann man auch den Menüpunkt "Docker Scout" im
@@ -335,7 +335,7 @@ Controller-Klassen und -Methoden konfigurieren und dann in einem Webbrowser mit
 
 ## AsciiDoctor und PlantUML
 
-Siehe `extras\doc\projekthandbuch\ReadMe.md`.
+Siehe `extras\doc\projekthandbuch.adoc`.
 
 ---
 

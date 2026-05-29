@@ -14,7 +14,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # Aufruf:   docker compose up
-#           docker compose exec buch bash   # "ash" bei Alpine
+#           docker compose exec player bash   # "ash" bei Alpine
 #             id
 #             env
 #             pwd
@@ -40,10 +40,10 @@ include:
 
 # https://docs.docker.com/reference/compose-file/services
 services:
-  buch:
-    image: juergenzimmermann/buch:2026.4.1-hardened
-    #image: juergenzimmermann/buch:2026.4.1-trixie
-    #image: juergenzimmermann/buch:2026.4.1-alpine
+  player:
+    image: juergenzimmermann/player:2026.4.1-hardened
+    #image: juergenzimmermann/player:2026.4.1-trixie
+    #image: juergenzimmermann/player:2026.4.1-alpine
     #entrypoint:["/bin/bash", "-c", "echo 'Container als bash gestartet.' && sleep infinity"]
     # (d)ash = (Debian) Almquist Shell
     #entrypoint: ["/bin/ash", "-c", "echo 'Container als ash gestartet.' && sleep infinity"]
@@ -75,7 +75,7 @@ services:
     networks: [acme-network]
     env_file: .env
     # generierter Rechnername, damit die Abfrage bzgl. Docker funktioniert
-    #hostname: buch
+    #hostname: player
     cap_drop: [ALL]
     deploy:
       resources:

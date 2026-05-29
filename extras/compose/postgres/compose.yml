@@ -1,0 +1,32 @@
+# Copyright (C) 2026 - present
+#
+# Aufruf: docker compose up
+
+services:
+  db:
+    image: postgres:18
+    ports:
+      - published: 5432
+        target: 5432
+    environment:
+      TZ: Europe/Berlin
+      POSTGRES_DB: player
+      POSTGRES_USER: player
+      POSTGRES_PASSWORD: p
+    networks: [acme-network]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready --dbname=player --username=player"]
+      interval: 5s
+      timeout: 2s
+      retries: 5
+      start_period: 5s
+    volumes:
+      - player_pg_data:/var/lib/postgresql/data
+
+volumes:
+  player_pg_data:
+    name: player_pg_data
+
+networks:
+  acme-network:
+    name: acme-network
