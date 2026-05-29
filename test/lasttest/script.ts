@@ -72,3 +72,12 @@ export const options: Options = {
   insecureSkipTLSVerify: true,
 };
 
+const getAdminToken = (): string => {
+  const response = http.post<"text">(tokenUrl, "username=admin&password=p", {
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+  });
+
+  expect(response.status).toBe(200);
+  return JSON.parse(response.body).access_token;
+};
+
