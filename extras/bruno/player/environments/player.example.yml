@@ -1,17 +1,17 @@
-name: player.local
+name: player.example
 variables:
   - name: clientId
     value: javascript-client
   - secret: true
     name: clientSecret
-    value: 0oSEd7oLFb3NBUywGhPmyLksV29RWCfS
+    value: CHANGE_ME
   - name: username
     value: admin
   - secret: true
     name: password
-    value: p
+    value: CHANGE_ME
   - name: playerUsername
     value: player
   - secret: true
     name: playerPassword
-    value: p
+    value: CHANGE_ME
