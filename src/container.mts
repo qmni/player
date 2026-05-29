@@ -11,4 +11,5 @@ export const container = {
     playerService,
     playerWriteService: new PlayerWriteService(playerService),
     dbPopulateService: new DbPopulateService(),
+    keycloakService: new KeycloakService(),
 };
