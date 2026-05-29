@@ -1,10 +1,10 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from "vitest";
 
-import { type Page } from '../../../src/player/router/page.mts';
+import { type Page } from "../../../src/player/router/page.mts";
 
-import { Player } from '../../../src/generated/prisma/client.ts';
+import { type Player } from "../../../src/generated/prisma/client.ts";
 
-import { CONTENT_TYPE, restURL } from '../constants.mts';
+import { CONTENT_TYPE, restURL } from "../constants.mts";
 
 type PlayerType = Player;
 
@@ -12,287 +12,281 @@ type PlayerType = Player;
 // T e s t d a t e n
 // -----------------------------------------------------------------------------
 
-const usernames = ['a', 'e', 'r'];
+const usernames = ["a", "e", "r"];
 
-const usernamesNichtVorhanden = ['xxx', 'yyy', 'zzz'];
+const usernamesNichtVorhanden = ["xxx", "yyy", "zzz"];
 
 const emails = [
-    'admin@player.de',
-    'mage@player.de',
+  "player1@example.com",
+  "player2@example.com",
+  "player3@example.com",
 ];
 
 const levelMin = [1, 10];
 
 const experienceMin = [100, 500];
 
-const playerClasses = ['WARRIOR', 'MAGE'];
+const playerClasses = ["WARRIOR", "MAGE"];
 
-const statusArray = ['ACTIVE', 'BANNED'];
+const statusArray = ["ACTIVE", "BANNED"];
 
 // -----------------------------------------------------------------------------
 // T e s t s
 // -----------------------------------------------------------------------------
 
-describe('GET /rest', () => {
-    test.concurrent('Alle Player', async () => {
-        const requestHeaders = new Headers();
+describe("GET /rest", () => {
+  test.concurrent("Alle Player", async () => {
+    const requestHeaders = new Headers();
 
-        requestHeaders.append('Accept', 'application/json');
+    requestHeaders.append("Accept", "application/json");
 
-        const response = await fetch(restURL, {
-            headers: requestHeaders,
-        });
-
-        const { status, headers } = response;
-
-        expect(status).toBe(200);
-
-        expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
-
-        const body = (await response.json()) as Page<PlayerType>;
-
-        body.content
-            .map((player) => player.id)
-            .forEach((id) => {
-                expect(id).toBeDefined();
-            });
+    const response = await fetch(restURL, {
+      headers: requestHeaders,
     });
 
-    test.concurrent.each(usernames)(
-        'Player mit Teil-Username %s suchen',
-        async (username) => {
-            const params = new URLSearchParams({ username });
+    const { status, headers } = response;
 
-            const url = `${restURL}?${params}`;
+    expect(status).toBe(200);
 
-            const requestHeaders = new Headers();
+    expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
 
-            requestHeaders.append('Accept', 'application/json');
+    const body = (await response.json()) as Page<PlayerType>;
 
-            const response = await fetch(url, {
-                headers: requestHeaders,
-            });
+    body.content
+      .map((player) => player.id)
+      .forEach((id) => {
+        expect(id).toBeDefined();
+      });
+  });
 
-            const { status, headers } = response;
+  test.concurrent.each(usernames)(
+    "Player mit Teil-Username %s suchen",
+    async (username) => {
+      const params = new URLSearchParams({ username });
 
-            expect(status).toBe(200);
+      const url = `${restURL}?${params}`;
 
-            expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
+      const requestHeaders = new Headers();
 
-            const body = (await response.json()) as Page<PlayerType>;
+      requestHeaders.append("Accept", "application/json");
 
-            expect(body).toBeDefined();
+      const response = await fetch(url, {
+        headers: requestHeaders,
+      });
 
-            body.content
-                .map((player) => player.username)
-                .forEach((u) =>
-                    expect(u.toLowerCase()).toStrictEqual(
-                        expect.stringContaining(username),
-                    ),
-                );
-        },
-    );
+      const { status, headers } = response;
 
-    test.concurrent.each(usernamesNichtVorhanden)(
-        'Player zu nicht vorhandenem Username %s suchen',
-        async (username) => {
-            const params = new URLSearchParams({ username });
+      expect(status).toBe(200);
 
-            const url = `${restURL}?${params}`;
+      expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
 
-            const requestHeaders = new Headers();
+      const body = (await response.json()) as Page<PlayerType>;
 
-            requestHeaders.append('Accept', 'application/json');
+      expect(body).toBeDefined();
 
-            const { status } = await fetch(url, {
-                headers: requestHeaders,
-            });
+      body.content
+        .map((player) => player.username)
+        .forEach((u) =>
+          expect(u.toLowerCase()).toStrictEqual(
+            expect.stringContaining(username),
+          ),
+        );
+    },
+  );
 
-            expect(status).toBe(404);
-        },
-    );
+  test.concurrent.each(usernamesNichtVorhanden)(
+    "Player zu nicht vorhandenem Username %s suchen",
+    async (username) => {
+      const params = new URLSearchParams({ username });
 
-    test.concurrent.each(emails)(
-        'Player mit Email %s suchen',
-        async (email) => {
-            const params = new URLSearchParams({ email });
+      const url = `${restURL}?${params}`;
 
-            const url = `${restURL}?${params}`;
+      const requestHeaders = new Headers();
 
-            const requestHeaders = new Headers();
+      requestHeaders.append("Accept", "application/json");
 
-            requestHeaders.append('Accept', 'application/json');
+      const { status } = await fetch(url, {
+        headers: requestHeaders,
+      });
 
-            const response = await fetch(url, {
-                headers: requestHeaders,
-            });
+      expect(status).toBe(404);
+    },
+  );
 
-            const { status, headers } = response;
+  test.concurrent.each(emails)("Player mit Email %s suchen", async (email) => {
+    const params = new URLSearchParams({ email });
 
-            expect(status).toBe(200);
+    const url = `${restURL}?${params}`;
 
-            expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
+    const requestHeaders = new Headers();
 
-            const body = (await response.json()) as Page<PlayerType>;
+    requestHeaders.append("Accept", "application/json");
 
-            expect(body).toBeDefined();
+    const response = await fetch(url, {
+      headers: requestHeaders,
+    });
 
-            const players = body.content;
+    const { status, headers } = response;
 
-            expect(players).toHaveLength(1);
+    expect(status).toBe(200);
 
-            const [player] = players;
+    expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
 
-            expect(player?.email).toBe(email);
-        },
-    );
+    const body = (await response.json()) as Page<PlayerType>;
 
-    test.concurrent.each(levelMin)(
-        'Player mit Mindest-Level %i suchen',
-        async (level) => {
-            const params = new URLSearchParams({
-                level: level.toString(),
-            });
+    expect(body).toBeDefined();
 
-            const url = `${restURL}?${params}`;
+    const players = body.content;
 
-            const requestHeaders = new Headers();
+    expect(players).toHaveLength(1);
 
-            requestHeaders.append('Accept', 'application/json');
+    const [player] = players;
 
-            const response = await fetch(url, {
-                headers: requestHeaders,
-            });
+    expect(player?.email).toBe(email);
+  });
 
-            const { status, headers } = response;
+  test.concurrent.each(levelMin)(
+    "Player mit Mindest-Level %i suchen",
+    async (level) => {
+      const params = new URLSearchParams({
+        level: level.toString(),
+      });
 
-            expect(status).toBe(200);
+      const url = `${restURL}?${params}`;
 
-            expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
+      const requestHeaders = new Headers();
 
-            const body = (await response.json()) as Page<PlayerType>;
+      requestHeaders.append("Accept", "application/json");
 
-            body.content
-                .map((player) => player.level)
-                .forEach((lvl) =>
-                    expect(lvl).toBeGreaterThanOrEqual(level),
-                );
-        },
-    );
+      const response = await fetch(url, {
+        headers: requestHeaders,
+      });
 
-    test.concurrent.each(experienceMin)(
-        'Player mit Mindest-Experience %i suchen',
-        async (experience) => {
-            const params = new URLSearchParams({
-                experience: experience.toString(),
-            });
+      const { status, headers } = response;
 
-            const url = `${restURL}?${params}`;
+      expect(status).toBe(200);
 
-            const requestHeaders = new Headers();
+      expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
 
-            requestHeaders.append('Accept', 'application/json');
+      const body = (await response.json()) as Page<PlayerType>;
 
-            const response = await fetch(url, {
-                headers: requestHeaders,
-            });
+      body.content
+        .map((player) => player.level)
+        .forEach((lvl) => expect(lvl).toBeGreaterThanOrEqual(level));
+    },
+  );
 
-            const { status, headers } = response;
+  test.concurrent.each(experienceMin)(
+    "Player mit Mindest-Experience %i suchen",
+    async (experience) => {
+      const params = new URLSearchParams({
+        experience: experience.toString(),
+      });
 
-            expect(status).toBe(200);
+      const url = `${restURL}?${params}`;
 
-            expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
+      const requestHeaders = new Headers();
 
-            const body = (await response.json()) as Page<PlayerType>;
+      requestHeaders.append("Accept", "application/json");
 
-            body.content
-                .map((player) => player.experience)
-                .forEach((exp) =>
-                    expect(exp).toBeGreaterThanOrEqual(experience),
-                );
-        },
-    );
+      const response = await fetch(url, {
+        headers: requestHeaders,
+      });
 
-    test.concurrent.each(playerClasses)(
-        'Player mit Klasse %s suchen',
-        async (playerClass) => {
-            const params = new URLSearchParams({
-                playerClass,
-            });
+      const { status, headers } = response;
 
-            const url = `${restURL}?${params}`;
+      expect(status).toBe(200);
 
-            const requestHeaders = new Headers();
+      expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
 
-            requestHeaders.append('Accept', 'application/json');
+      const body = (await response.json()) as Page<PlayerType>;
 
-            const response = await fetch(url, {
-                headers: requestHeaders,
-            });
+      body.content
+        .map((player) => player.experience)
+        .forEach((exp) => expect(exp).toBeGreaterThanOrEqual(experience));
+    },
+  );
 
-            const { status, headers } = response;
+  test.concurrent.each(playerClasses)(
+    "Player mit Klasse %s suchen",
+    async (playerClass) => {
+      const params = new URLSearchParams({
+        playerClass,
+      });
 
-            expect(status).toBe(200);
+      const url = `${restURL}?${params}`;
 
-            expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
+      const requestHeaders = new Headers();
 
-            const body = (await response.json()) as Page<PlayerType>;
+      requestHeaders.append("Accept", "application/json");
 
-            body.content.forEach((player) => {
-                expect(player.playerClass).toBe(playerClass);
-            });
-        },
-    );
+      const response = await fetch(url, {
+        headers: requestHeaders,
+      });
 
-    test.concurrent.each(statusArray)(
-        'Player mit Status %s suchen',
-        async (statusExpected) => {
-            const params = new URLSearchParams({
-                status: statusExpected,
-            });
+      const { status, headers } = response;
 
-            const url = `${restURL}?${params}`;
+      expect(status).toBe(200);
 
-            const requestHeaders = new Headers();
+      expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
 
-            requestHeaders.append('Accept', 'application/json');
+      const body = (await response.json()) as Page<PlayerType>;
 
-            const response = await fetch(url, {
-                headers: requestHeaders,
-            });
+      body.content.forEach((player) => {
+        expect(player.playerClass).toBe(playerClass);
+      });
+    },
+  );
 
-            const { status, headers } = response;
+  test.concurrent.each(statusArray)(
+    "Player mit Status %s suchen",
+    async (statusExpected) => {
+      const params = new URLSearchParams({
+        status: statusExpected,
+      });
 
-            expect(status).toBe(200);
+      const url = `${restURL}?${params}`;
 
-            expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
+      const requestHeaders = new Headers();
 
-            const body = (await response.json()) as Page<PlayerType>;
+      requestHeaders.append("Accept", "application/json");
 
-            body.content.forEach((player) => {
-                expect(player.status).toBe(statusExpected);
-            });
-        },
-    );
+      const response = await fetch(url, {
+        headers: requestHeaders,
+      });
 
-    test.concurrent(
-        'Keine Player zu einer nicht-vorhandenen Property',
-        async () => {
-            const params = new URLSearchParams({
-                foo: 'bar',
-            });
+      const { status, headers } = response;
 
-            const url = `${restURL}?${params}`;
+      expect(status).toBe(200);
 
-            const requestHeaders = new Headers();
+      expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
 
-            requestHeaders.append('Accept', 'application/json');
+      const body = (await response.json()) as Page<PlayerType>;
 
-            const { status } = await fetch(url, {
-                headers: requestHeaders,
-            });
+      body.content.forEach((player) => {
+        expect(player.status).toBe(statusExpected);
+      });
+    },
+  );
 
-            expect(status).toBe(404);
-        },
-    );
+  test.concurrent(
+    "Keine Player zu einer nicht-vorhandenen Property",
+    async () => {
+      const params = new URLSearchParams({
+        foo: "bar",
+      });
+
+      const url = `${restURL}?${params}`;
+
+      const requestHeaders = new Headers();
+
+      requestHeaders.append("Accept", "application/json");
+
+      const { status } = await fetch(url, {
+        headers: requestHeaders,
+      });
+
+      expect(status).toBe(404);
+    },
+  );
 });
