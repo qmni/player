@@ -1,0 +1,17 @@
+name: player.example
+variables:
+  - name: clientId
+    value: javascript-client
+  - secret: true
+    name: clientSecret
+    value: CHANGE_ME
+  - name: username
+    value: admin
+  - secret: true
+    name: password
+    value: CHANGE_ME
+  - name: playerUsername
+    value: player
+  - secret: true
+    name: playerPassword
+    value: CHANGE_ME
