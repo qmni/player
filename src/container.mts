@@ -1,6 +1,7 @@
 import { PlayerService } from './player/service/player-service.mts';
 import { PlayerWriteService } from './player/service/player-write-service.mts';
 import { DbPopulateService } from './config/dev/db-populate.mts';
+import { KeycloakService } from './security/keycloak-service.mts';
 
 const playerService = new PlayerService();
 
