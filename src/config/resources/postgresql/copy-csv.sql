@@ -1,23 +1,33 @@
--- Copyright (C) 2022 - present Juergen Zimmermann, Hochschule Karlsruhe
---
--- This program is free software: you can redistribute it and/or modify
--- it under the terms of the GNU General Public License as published by
--- the Free Software Foundation, either version 3 of the License, or
--- (at your option) any later version.
---
--- This program is distributed in the hope that it will be useful,
--- but WITHOUT ANY WARRANTY; without even the implied warranty of
--- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
--- GNU General Public License for more details.
---
--- You should have received a copy of the GNU General Public License
--- along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-- Aufruf: psql --dbname=player --username=player --file=/init/player/sql/copy-csv.sql
 
--- Aufruf:   psql --dbname=buch --username=postgres --file=/init/buch/sql/copy-csv.sql
+SET search_path TO public;
 
-SET search_path TO buch;
+INSERT INTO guild (id, name, description, "foundedAt", version)
+VALUES
+  (10, 'Warriors', 'Eine Guild', CURRENT_TIMESTAMP, 0),
+  (20, 'Mages', 'Magische Guild', CURRENT_TIMESTAMP, 0),
+  (30, 'Hunters', 'Jaeger Guild', CURRENT_TIMESTAMP, 0);
 
--- https://www.postgresql.org/docs/current/sql-copy.html
-COPY buch FROM '/init/buch/csv/buch.csv' (FORMAT csv, DELIMITER ';', HEADER true);
-COPY titel FROM '/init/buch/csv/titel.csv' (FORMAT csv, DELIMITER ';', HEADER true);
-COPY abbildung FROM '/init/buch/csv/abbildung.csv' (FORMAT csv, DELIMITER ';', HEADER true);
+INSERT INTO player (
+  id,
+  username,
+  email,
+  level,
+  experience,
+  "playerClass",
+  status,
+  "guildId",
+  "createdAt",
+  "updatedAt",
+  version
+)
+VALUES
+  (1, 'alpha', 'alpha@example.com', 1, 100, 'WARRIOR', 'ACTIVE', 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+  (20, 'beta', 'beta@example.com', 10, 500, 'MAGE', 'ACTIVE', 20, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+  (30, 'charlie', 'charlie@example.com', 30, 1500, 'ROGUE', 'ACTIVE', 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+  (40, 'delta', 'delta@example.com', 40, 2500, 'PRIEST', 'ACTIVE', 30, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+  (50, 'echo', 'echo@example.com', 50, 3500, 'HUNTER', 'BANNED', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+  (60, 'remove', 'remove@example.com', 60, 4500, 'WARRIOR', 'ACTIVE', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);
+
+SELECT setval(pg_get_serial_sequence('guild', 'id'), (SELECT max(id) FROM guild));
+SELECT setval(pg_get_serial_sequence('player', 'id'), (SELECT max(id) FROM player));

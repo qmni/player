@@ -34,7 +34,7 @@
   "author": "Juergen Zimmermann <Juergen.Zimmermann@h-ka.de> (https://www.h-ka.de)",
   "type": "module",
   "scripts": {
-    "start": "bun src/index.mts",
+    "start": "docker compose -f extras/compose/postgres/compose.yml up -d && bun src/index.mts",
     "test": "vitest",
     "asciidoctor": "node scripts/asciidoctor.mts",
     "dev": "bun --watch src/index.mts",
