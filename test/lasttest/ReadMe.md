@@ -18,20 +18,20 @@ siehe https://github.com/grafana/k6-learn/blob/main/Modules/II-k6-Foundations/03
 ## Start des zu testenden Applikationsservers
 
 Bevor der zu testende Applikationsserver gestartet wird, sollte zumindest in
-`src\config\resources\app.toml` bzw. `extras\compose\buch\app.yml`
+`src\config\resources\app.toml` bzw. `extras\compose\player\app.toml`
 der Log-Level `debug` deaktiviert und auf "Pretty Printing" werden, um die
 Log-Ausgaben in der Konsole zu reduzieren. Dazu genügt es, die Zeilen
- `log.level = "debug"` und `log.pretty = true` auszukommentieren.
+`log.level = "debug"` und `log.pretty = true` auszukommentieren.
 
 Der zu testende Applikationsserver einschließlich der Backend-Systeme muss
 gestartet, z.B. `bun start` oder als Docker Container:
 
 ```shell
     # Windows
-    cd extras\compose\buch
+    cd extras\compose\player
 
     # macOS:
-    cd extras/compose/buch
+    cd extras/compose/player
 
     docker compose up
 ```
@@ -52,8 +52,8 @@ Typprüfung statt. Details siehe https://esbuild.github.io/content-types/#typesc
 ## Aufruf von k6
 
 Um die Ergebnisse eines Lasttests durch zeitintensive Logausgaben in der
-Konsole nicht zu verfälschen, sollten in der Datei `extras\compose\buch\app.toml`
-die Optionen `log.level` und  `log.pretty` auskommentiert werden. Außerdem ist
+Konsole nicht zu verfälschen, sollten in der Datei `extras\compose\player\app.toml`
+die Optionen `log.level` und `log.pretty` auskommentiert werden. Außerdem ist
 zu beachten, dass die Scenarios, bei denen bewusst der Statuscode 404 bzw.
 NOT_FOUND erwartet wird, zu `http_req_failed` zugeordnet werden.
 
