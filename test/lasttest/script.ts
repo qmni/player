@@ -108,3 +108,18 @@ export function getPlayersByUsername() {
   sleep(1);
 }
 
+export function postPlayer() {
+  const token = getAdminToken();
+  const suffix = `${__VU}-${__ITER}-${Date.now()}`;
+  const playerClass =
+    playerClasses[Math.floor(Math.random() * playerClasses.length)];
+  const email = emails[Math.floor(Math.random() * emails.length)];
+  const player = {
+    username: `k6-${suffix}`,
+    email: `k6-${suffix}-${email}`,
+    level: 10,
+    experience: 1000,
+    playerClass,
+    status: "ACTIVE",
+  };
+
