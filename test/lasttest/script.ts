@@ -90,3 +90,12 @@ export function setup() {
   expect(response.status).toBe(200);
 }
 
+export function getPlayerById() {
+  const id = ids[Math.floor(Math.random() * ids.length)];
+  const response = http.get(`${restUrl}/${id}`);
+
+  expect(response.status).toBe(200);
+  expect(response.headers["Content-Type"]).toContain("application/json");
+  sleep(1);
+}
+
