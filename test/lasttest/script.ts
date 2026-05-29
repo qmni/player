@@ -123,3 +123,15 @@ export function postPlayer() {
     status: "ACTIVE",
   };
 
+  const response = http.post(restUrl, JSON.stringify(player), {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  expect(response.status).toBe(201);
+  expect(response.headers["Location"]).toContain(restUrl);
+  sleep(1);
+}
+
