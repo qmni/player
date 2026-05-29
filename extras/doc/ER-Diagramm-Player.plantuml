@@ -1,4 +1,4 @@
-' Copyright (C) 2019 - present Juergen Zimmermann, Hochschule Karlsruhe
+' Copyright (C) 2026 - present Juergen Zimmermann, Hochschule Karlsruhe
 '
 ' This program is free software: you can redistribute it and/or modify
 ' it under the terms of the GNU General Public License as published by
@@ -15,49 +15,34 @@
 
 ' Preview durch <Alt>d
 
-@startuml ER Diagramm
+@startuml ER Diagramm Player
 
-' hide the spot
 hide circle
-
-' evtl. Prbleme mit Kraehenfuessen vermeiden
 skinparam linetype ortho
 
-entity "Buch" {
+entity "Player" {
   * id: integer <<generated>>
-  --
+  * username: text <<unique>>
+  * email: text <<unique>>
+  * level: integer
+  * experience: integer
+  * playerClass: text
+  * status: text
+  * guildId: integer <<FK>>
+  * createdAt: timestamp
+  * updatedAt: timestamp
   * version: integer
-  * isbn: text
-  * rating: number
-  * art: text
-  * preis: number
-  * rabatt: number
-  * lieferbar: boolean
-    datum: date
-    homepage: text
-  * **titel_id**: integer <<FK>>
-    schlagwoerter: text
-  * erzeugt: timestamp
-  * aktualisiert: timestamp
 }
 
-entity "Titel" {
+entity "Guild" {
   * id: integer <<generated>>
-  --
-  * titel: text
-    untertitel: text
+  * name: text <<unique>>
+    description: text
+  * foundedAt: timestamp
+  * version: integer
 }
 
-entity "Abbildung" {
-  * id: integer <<generated>>
-  --
-  * beschriftung: text
-    contentType: text
-  * **buch_id**: integer <<FK>>
-}
-
-Buch ||..|| Titel
-Buch ||..o{ Abbildung
+Player }o--|| Guild : "gehört zu"
 
 footer (c) Jürgen Zimmermann
 
