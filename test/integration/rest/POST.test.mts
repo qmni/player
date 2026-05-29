@@ -1,228 +1,213 @@
-import { beforeAll, describe, expect, test } from 'vitest';
+import { beforeAll, describe, expect, test } from "vitest";
 
-import { type PlayerNewType } from '../../../src/player/router/player-validation.mts';
+import { type PlayerNewType } from "../../../src/player/router/player-validation.mts";
 
-import { PlayerService } from '../../../src/player/service/player-service.mts';
+import { PlayerService } from "../../../src/player/service/player-service.mts";
 
-import { type ProblemDetails } from '../../../src/problem-details.mts';
+import { type ProblemDetails } from "../../../src/problem-details.mts";
 
 import {
-    APPLICATION_JSON,
-    AUTHORIZATION,
-    BEARER,
-    CONTENT_TYPE,
-    LOCATION,
-    POST,
-    restURL,
-} from '../constants.mts';
+  APPLICATION_JSON,
+  AUTHORIZATION,
+  BEARER,
+  CONTENT_TYPE,
+  LOCATION,
+  POST,
+  restURL,
+} from "../constants.mts";
 
-import { getToken } from '../token.mts';
+import { getToken } from "../token.mts";
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
 // -----------------------------------------------------------------------------
 
 const neuerPlayer: PlayerNewType = {
-    username: 'newPlayer',
-    email: 'new@player.de',
-    level: 10,
-    experience: 1000,
-    playerClass: 'MAGE',
-    status: 'ACTIVE',
+  username: "newPlayer",
+  email: "new@player.de",
+  level: 10,
+  experience: 1000,
+  playerClass: "MAGE",
+  status: "ACTIVE",
 };
 
 const neuerPlayerInvalid: Record<string, unknown> = {
-    username: '',
-    email: 'ungueltig',
-    level: -1,
-    experience: -100,
-    playerClass: 'INVALID',
-    status: 'UNKNOWN',
+  username: "",
+  email: "ungueltig",
+  level: -1,
+  experience: -100,
+  playerClass: "INVALID",
+  status: "UNKNOWN",
 };
 
 const neuerPlayerUsernameExistiert: PlayerNewType = {
-    username: 'admin',
-    email: 'another@player.de',
-    level: 1,
-    experience: 100,
-    playerClass: 'WARRIOR',
-    status: 'ACTIVE',
+  username: "player1",
+  email: "another@player.de",
+  level: 1,
+  experience: 100,
+  playerClass: "WARRIOR",
+  status: "ACTIVE",
 };
 
 const neuerPlayerEmailExistiert: PlayerNewType = {
-    username: 'uniquePlayer',
-    email: 'admin@player.de',
-    level: 1,
-    experience: 100,
-    playerClass: 'ROGUE',
-    status: 'ACTIVE',
+  username: "uniquePlayer",
+  email: "player1@example.com",
+  level: 1,
+  experience: 100,
+  playerClass: "ROGUE",
+  status: "ACTIVE",
 };
 
 // -----------------------------------------------------------------------------
 // T e s t s
 // -----------------------------------------------------------------------------
 
-describe('POST /rest', () => {
-    let token: string;
+describe("POST /rest", () => {
+  let token: string;
 
-    beforeAll(async () => {
-        token = await getToken('admin', 'p');
+  beforeAll(async () => {
+    token = await getToken("admin", "p");
+  });
+
+  test("Neuer Player", async () => {
+    const headers = new Headers();
+
+    headers.append(CONTENT_TYPE, APPLICATION_JSON);
+
+    headers.append(AUTHORIZATION, `${BEARER} ${token}`);
+
+    const response = await fetch(restURL, {
+      method: POST,
+      body: JSON.stringify(neuerPlayer),
+      headers,
     });
 
-    test('Neuer Player', async () => {
-        const headers = new Headers();
+    const { status } = response;
 
-        headers.append(CONTENT_TYPE, APPLICATION_JSON);
+    expect(status).toBe(201);
 
-        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
+    const responseHeaders = response.headers;
 
-        const response = await fetch(restURL, {
-            method: POST,
-            body: JSON.stringify(neuerPlayer),
-            headers,
-        });
+    const location = responseHeaders.get(LOCATION);
 
-        const { status } = response;
+    expect(location).toBeDefined();
 
-        expect(status).toBe(201);
+    const indexLastSlash = location?.lastIndexOf("/") ?? -1;
 
-        const responseHeaders = response.headers;
+    expect(indexLastSlash).not.toBe(-1);
 
-        const location = responseHeaders.get(LOCATION);
+    const idStr = location?.slice(indexLastSlash + 1);
 
-        expect(location).toBeDefined();
+    expect(idStr).toBeDefined();
 
-        const indexLastSlash = location?.lastIndexOf('/') ?? -1;
+    expect(PlayerService.ID_PATTERN.test(idStr ?? "")).toBe(true);
+  });
 
-        expect(indexLastSlash).not.toBe(-1);
+  test("Neuer Player mit ungueltigen Daten", async () => {
+    const headers = new Headers();
 
-        const idStr = location?.slice(indexLastSlash + 1);
+    headers.append(CONTENT_TYPE, APPLICATION_JSON);
 
-        expect(idStr).toBeDefined();
+    headers.append(AUTHORIZATION, `${BEARER} ${token}`);
 
-        expect(PlayerService.ID_PATTERN.test(idStr ?? '')).toBe(true);
+    const expectedPaths = [
+      "username",
+      "email",
+      "level",
+      "experience",
+      "playerClass",
+      "status",
+    ];
+
+    const response = await fetch(restURL, {
+      method: POST,
+      body: JSON.stringify(neuerPlayerInvalid),
+      headers,
     });
 
-    test('Neuer Player mit ungueltigen Daten', async () => {
-        const headers = new Headers();
+    const { status } = response;
 
-        headers.append(CONTENT_TYPE, APPLICATION_JSON);
+    expect(status).toBe(422);
 
-        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
+    const body = (await response.json()) as ProblemDetails;
 
-        const expectedPaths = [
-            'username',
-            'email',
-            'level',
-            'experience',
-            'playerClass',
-            'status',
-        ];
+    const { detail } = body;
 
-        const response = await fetch(restURL, {
-            method: POST,
-            body: JSON.stringify(neuerPlayerInvalid),
-            headers,
-        });
+    expect(detail).toBeDefined();
 
-        const { status } = response;
+    expect(detail).toHaveLength(expectedPaths.length);
 
-        expect(status).toBe(422);
+    const paths = (detail as any[]).map((d: any) => d.path[0]);
 
-        const body = (await response.json()) as ProblemDetails;
+    expect(paths).toStrictEqual(expect.arrayContaining(expectedPaths));
+  });
 
-        const { detail } = body;
+  test("Neuer Player, aber Username existiert bereits", async () => {
+    const headers = new Headers();
 
-        expect(detail).toBeDefined();
+    headers.append(CONTENT_TYPE, APPLICATION_JSON);
 
-        expect(detail).toHaveLength(expectedPaths.length);
+    headers.append(AUTHORIZATION, `${BEARER} ${token}`);
 
-        const paths = (detail as any[]).map((d: any) => d.path[0]);
-
-        expect(paths).toStrictEqual(
-            expect.arrayContaining(expectedPaths),
-        );
+    const response = await fetch(restURL, {
+      method: POST,
+      body: JSON.stringify(neuerPlayerUsernameExistiert),
+      headers,
     });
 
-    test('Neuer Player, aber Username existiert bereits', async () => {
-        const headers = new Headers();
+    const { status } = response;
 
-        headers.append(CONTENT_TYPE, APPLICATION_JSON);
+    expect(status).toBe(422);
 
-        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
+    const body = (await response.json()) as ProblemDetails;
 
-        const response = await fetch(restURL, {
-            method: POST,
-            body: JSON.stringify(neuerPlayerUsernameExistiert),
-            headers,
-        });
+    expect(body.detail).toStrictEqual(expect.stringContaining("Username"));
+  });
 
-        const { status } = response;
+  test("Neuer Player, aber Email existiert bereits", async () => {
+    const headers = new Headers();
 
-        expect(status).toBe(422);
+    headers.append(CONTENT_TYPE, APPLICATION_JSON);
 
-        const body = (await response.json()) as ProblemDetails;
+    headers.append(AUTHORIZATION, `${BEARER} ${token}`);
 
-        expect(body.detail).toStrictEqual(
-            expect.stringContaining('Username'),
-        );
+    const response = await fetch(restURL, {
+      method: POST,
+      body: JSON.stringify(neuerPlayerEmailExistiert),
+      headers,
     });
 
-    test('Neuer Player, aber Email existiert bereits', async () => {
-        const headers = new Headers();
+    const { status } = response;
 
-        headers.append(CONTENT_TYPE, APPLICATION_JSON);
+    expect(status).toBe(422);
 
-        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
+    const body = (await response.json()) as ProblemDetails;
 
-        const response = await fetch(restURL, {
-            method: POST,
-            body: JSON.stringify(neuerPlayerEmailExistiert),
-            headers,
-        });
+    expect(body.detail).toStrictEqual(expect.stringContaining("E-Mail"));
+  });
 
-        const { status } = response;
-
-        expect(status).toBe(422);
-
-        const body = (await response.json()) as ProblemDetails;
-
-        expect(body.detail).toStrictEqual(
-            expect.stringContaining('E-Mail'),
-        );
+  test.concurrent("Neuer Player, aber ohne Token", async () => {
+    const { status } = await fetch(restURL, {
+      method: POST,
+      body: JSON.stringify(neuerPlayer),
     });
 
-    test.concurrent('Neuer Player, aber ohne Token', async () => {
-        const { status } = await fetch(restURL, {
-            method: POST,
-            body: JSON.stringify(neuerPlayer),
-        });
+    expect(status).toBe(401);
+  });
 
-        expect(status).toBe(401);
+  test.concurrent("Neuer Player, aber mit falschem Token", async () => {
+    const headers = new Headers();
+
+    headers.append(CONTENT_TYPE, APPLICATION_JSON);
+
+    headers.append(AUTHORIZATION, `${BEARER} FALSCHER_TOKEN`);
+
+    const { status } = await fetch(restURL, {
+      method: POST,
+      body: JSON.stringify(neuerPlayer),
+      headers,
     });
 
-    test.concurrent(
-        'Neuer Player, aber mit falschem Token',
-        async () => {
-            const headers = new Headers();
-
-            headers.append(CONTENT_TYPE, APPLICATION_JSON);
-
-            headers.append(
-                AUTHORIZATION,
-                `${BEARER} FALSCHER_TOKEN`,
-            );
-
-            const { status } = await fetch(restURL, {
-                method: POST,
-                body: JSON.stringify(neuerPlayer),
-                headers,
-            });
-
-            expect(status).toBe(401);
-        },
-    );
-
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    test.concurrent.todo('Abgelaufener Token', () => {});
+    expect(status).toBe(401);
+  });
 });
