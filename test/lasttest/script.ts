@@ -159,6 +159,6 @@ export function queryPlayer() {
   });
 
   expect(response.status).toBe(200);
-  expect(response.headers['Content-Type']).toContain('application/json');
+  expect(response.headers['Content-Type']).toContain('application/graphql-response+json');
   sleep(1);
 }

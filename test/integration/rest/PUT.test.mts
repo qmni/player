@@ -28,7 +28,7 @@ const geaenderterPlayer: PlayerUpdateType = {
   status: 'ACTIVE',
 };
 
-const idVorhanden = '30';
+const idVorhanden = '70';
 
 const geaenderterPlayerIdNichtVorhanden: PlayerUpdateType = {
   username: 'ghostPlayer',
