@@ -153,4 +153,14 @@ export function queryPlayer() {
         `,
   };
 
+  const response = http.post(graphqlUrl, JSON.stringify(body), {
+    headers: {
+      Accept: "application/graphql-response+json",
+      "Content-Type": "application/json",
+    },
+  });
 
+  expect(response.status).toBe(200);
+  expect(response.headers["Content-Type"]).toContain("application/json");
+  sleep(1);
+}
