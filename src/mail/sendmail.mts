@@ -1,3 +1,4 @@
+// oxlint-disable sort-imports
 // Copyright (C) 2016 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -18,10 +19,9 @@
  * Verschicken von Emails.
  * @packageDocumentation
  */
-
-import { type SendMailOptions, createTransport } from 'nodemailer';
 import { mailConfig } from '../config/mail.mts';
 import { getLogger } from '../logger/logger.mts';
+import { type SendMailOptions, createTransport } from 'nodemailer';
 
 /** Typdefinition für das Senden einer Email. */
 export type SendMailParams = {

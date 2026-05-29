@@ -1,3 +1,5 @@
+// oxlint-disable no-magic-numbers
+// oxlint-disable sort-imports
 // Copyright (C) 2016 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -19,14 +21,13 @@
  *
  * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
-
-import { readFile } from 'node:fs/promises';
-import { hostname } from 'node:os';
-import { URL } from 'node:url';
 import { getLogger } from '../logger/logger.mts';
 import { config } from './app.mts';
 import { env } from './env.mts';
 import { resourcesURL } from './resources.mts';
+import { readFile } from 'node:fs/promises';
+import { hostname } from 'node:os';
+import { URL } from 'node:url';
 
 const logger = getLogger('config/server', 'file');
 

@@ -1,3 +1,4 @@
+// oxlint-disable sort-imports
 // Copyright (C) 2026 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -17,13 +18,11 @@
  * Das Modul enthält Objekte mit Konfigurationsdaten aus der TOML-Datei.
  * @packageDocumentation
  */
-
+import { resourcesURL } from './resources.mts';
 // TOML mit Bun einlesen: inkompatibel mit Node
 // https://bun.com/docs/guides/runtime/import-toml
-
 import { readFile } from 'node:fs/promises';
 import { parse } from 'smol-toml';
-import { resourcesURL } from './resources.mts';
 
 export type AppConfig = Record<'server' | 'db' | 'keycloak' | 'log' | 'health' | 'mail', any>;
 

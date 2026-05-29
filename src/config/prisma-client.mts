@@ -1,3 +1,7 @@
+// oxlint-disable id-length
+// oxlint-disable sort-imports
+import { PrismaClient } from '../generated/prisma/client.ts';
+import { getLogger } from '../logger/logger.mts';
 // Copyright (C) 2025 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -12,13 +16,10 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-
 import { PrismaPg } from '@prisma/adapter-pg';
 import { prismaQueryInsights } from '@prisma/sqlcommenter-query-insights';
-import process from 'node:process';
 import { styleText } from 'node:util';
-import { PrismaClient } from '../generated/prisma/client.ts';
-import { getLogger } from '../logger/logger.mts';
+import process from 'node:process';
 
 /**
  * Das Modul besteht aus dem Objekt {@linkcode prismaClient} als DB-Client

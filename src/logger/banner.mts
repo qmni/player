@@ -1,3 +1,4 @@
+// oxlint-disable sort-imports
 // Copyright (C) 2021 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -17,13 +18,12 @@
  * Das Modul enthält die Funktion, um die Test-DB neu zu laden.
  * @packageDocumentation
  */
-
-import Bun from 'bun';
-import figlet from 'figlet';
-import { release, type, userInfo } from 'node:os';
-import process from 'node:process';
 import { serverConfig } from '../config/server.mts';
 import { getLogger } from './logger.mts';
+import { release, type, userInfo } from 'node:os';
+import Bun from 'bun';
+import figlet from 'figlet';
+import process from 'node:process';
 
 const logger = getLogger('banner', 'func');
 

@@ -1,8 +1,9 @@
-import { GraphQLError } from 'graphql';
+// oxlint-disable sort-imports
 import { container } from '../../container.mts';
 import { getLogger } from '../../logger/logger.mts';
 import { PlayerNewSchema, PlayerUpdateGraphQLSchema } from '../router/player-validation.mts';
 import { NotFoundError } from '../service/errors.mts';
+import { GraphQLError } from 'graphql';
 import {
   type CreatePayload,
   type DeletePayload,

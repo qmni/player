@@ -1,3 +1,5 @@
+// oxlint-disable no-magic-numbers
+// oxlint-disable sort-imports
 // Copyright (C) 2024 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -17,7 +19,6 @@
  * Das Modul enthält die Konfiguration für _Keycloak_.
  * @packageDocumentation
  */
-
 import { getLogger } from '../logger/logger.mts';
 import { config } from './app.mts';
 import { env } from './env.mts';

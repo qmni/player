@@ -1,6 +1,7 @@
-import { beforeAll, describe, expect, test } from 'vitest';
+// oxlint-disable sort-imports
 import { AUTHORIZATION, BEARER, DELETE, restURL } from '../constants.mts';
 import { getToken } from '../token.mts';
+import { beforeAll, describe, expect, test } from 'vitest';
 
 const id = '50';
 

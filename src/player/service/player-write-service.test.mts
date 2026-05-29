@@ -1,8 +1,12 @@
-import { beforeEach, describe, expect, test, vi } from 'vitest';
+// oxlint-disable no-magic-numbers
+// oxlint-disable promise/prefer-await-to-callbacks
+// oxlint-disable sort-imports
+// oxlint-disable vitest/prefer-import-in-mock
 import { type Prisma } from '../../generated/prisma/client.ts';
 import { PlayerClass, PlayerStatus } from '../../generated/prisma/enums.ts';
 import { PlayerService } from './player-service.mts';
 import { type PlayerCreate, PlayerWriteService } from './player-write-service.mts';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 const { createMock, countMock, transactionMock, sendmailMock } = vi.hoisted(() => {
   return {

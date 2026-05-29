@@ -1,3 +1,5 @@
+// oxlint-disable max-lines
+// oxlint-disable sort-imports
 import { type PlayerMitGuild } from '../service/player-service.mts';
 import { type PlayerCreate, type PlayerUpdate } from '../service/player-write-service.mts';
 import { type Suchparameter } from '../service/suchparameter.mts';

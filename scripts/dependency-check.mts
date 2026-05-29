@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// oxlint-disable promise/prefer-await-to-callbacks
 // Copyright (C) 2023 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify

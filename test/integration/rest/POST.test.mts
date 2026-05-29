@@ -1,11 +1,10 @@
+// oxlint-disable id-length
+// oxlint-disable max-lines-per-function
+// oxlint-disable sort-imports
 import { beforeAll, describe, expect, test } from 'vitest';
-
 import { type PlayerNewType } from '../../../src/player/router/player-validation.mts';
-
 import { PlayerService } from '../../../src/player/service/player-service.mts';
-
 import { type ProblemDetails } from '../../../src/problem-details.mts';
-
 import {
   APPLICATION_JSON,
   AUTHORIZATION,
@@ -15,7 +14,6 @@ import {
   POST,
   restURL,
 } from '../constants.mts';
-
 import { getToken } from '../token.mts';
 
 // -----------------------------------------------------------------------------

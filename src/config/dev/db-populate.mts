@@ -1,3 +1,4 @@
+// oxlint-disable sort-imports
 // Copyright (C) 2021 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -17,16 +18,15 @@
  * Das Modul enthält die Funktionalität, um die Test-DB neu zu laden.
  * @packageDocumentation
  */
-
-import { PrismaPg } from '@prisma/adapter-pg';
-import { readFile } from 'node:fs/promises';
-import process from 'node:process';
-import { URL } from 'node:url';
 import { PrismaClient } from '../../generated/prisma/client.ts';
 import { getLogger } from '../../logger/logger.mts';
 import { config } from '../app.mts';
 import { adapter } from '../prisma-client.mts';
 import { resourcesURL } from '../resources.mts';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { readFile } from 'node:fs/promises';
+import { URL } from 'node:url';
+import process from 'node:process';
 
 /**
  * Die Test-DB wird im Development-Modus neu geladen, nachdem die Module

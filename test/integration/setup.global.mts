@@ -1,3 +1,4 @@
+// oxlint-disable import/no-default-export
 import { AUTHORIZATION, BEARER, POST, baseURL } from './constants.mts';
 import { getToken } from './token.mts';
 

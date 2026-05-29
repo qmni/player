@@ -19,9 +19,8 @@
  * Alternativen: Winston oder evtl. Bunyan
  * @packageDocumentation
  */
-
-import type pino from 'pino';
 import { parentLogger } from '../config/logger.mts';
+import type pino from 'pino';
 
 /**
  * Eine Funktion, um ein Logger-Objekt von `Pino` zu erzeugen, so dass ein

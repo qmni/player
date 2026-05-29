@@ -1,9 +1,10 @@
-import { createSchema, createYoga } from 'graphql-yoga';
-import { Hono } from 'hono';
+// oxlint-disable sort-imports
 import { getLogger } from '../../logger/logger.mts';
 import { createHandler, deleteHandler, tokenHandler, updateHandler } from './mutation-handler.mts';
 import { playerHandler, playersHandler } from './query-handler.mts';
 import { rolesRequired } from './roles-required.mts';
+import { createSchema, createYoga } from 'graphql-yoga';
+import { Hono } from 'hono';
 import {
   type ID,
   type PlayerNeuInput,

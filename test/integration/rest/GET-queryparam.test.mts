@@ -1,10 +1,11 @@
-import { describe, expect, test } from 'vitest';
-
-import { type Page } from '../../../src/player/router/page.mts';
-
+// oxlint-disable id-length
+// oxlint-disable max-lines-per-function
+// oxlint-disable no-magic-numbers
+// oxlint-disable sort-imports
 import { type Player } from '../../../src/generated/prisma/client.ts';
-
+import { type Page } from '../../../src/player/router/page.mts';
 import { CONTENT_TYPE, restURL } from '../constants.mts';
+import { describe, expect, test } from 'vitest';
 
 type PlayerType = Player;
 

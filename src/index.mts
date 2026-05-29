@@ -1,11 +1,13 @@
-import Bun from 'bun';
-import process from 'node:process';
+// oxlint-disable no-void
+// oxlint-disable sort-imports
 import { app } from './app.mts';
 import { env } from './config/env.mts';
 import { connectDB, disconnectDB } from './config/prisma-client.mts';
 import { serverConfig } from './config/server.mts';
 import { container } from './container.mts';
 import { banner } from './logger/banner.mts';
+import Bun from 'bun';
+import process from 'node:process';
 
 const { NODE_ENV } = env;
 

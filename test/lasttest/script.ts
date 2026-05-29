@@ -1,8 +1,11 @@
-import http from 'k6/http';
-import { sleep } from 'k6';
-import { type Options } from 'k6/options';
+// oxlint-disable func-style
+// oxlint-disable no-magic-numbers
+// oxlint-disable sort-imports
 // @ts-expect-error https://github.com/grafana/k6-jslib-testing
 import { expect } from 'https://jslib.k6.io/k6-testing/0.6.1/index.js';
+import { sleep } from 'k6';
+import { type Options } from 'k6/options';
+import http from 'k6/http';
 
 const baseUrl = 'https://localhost:3000';
 const restUrl = `${baseUrl}/rest/player`;

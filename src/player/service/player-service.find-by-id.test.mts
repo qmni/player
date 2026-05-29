@@ -1,7 +1,9 @@
-import { beforeEach, describe, expect, test, vi } from 'vitest';
+// oxlint-disable sort-imports
+// oxlint-disable vitest/prefer-import-in-mock
 import { type PrismaClient } from '../../generated/prisma/client.ts';
 import { PlayerClass, PlayerStatus } from '../../generated/prisma/enums.ts';
 import { type PlayerMitGuild, PlayerService } from './player-service.mts';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 const { findUniqueMock } = vi.hoisted(() => {
   return {

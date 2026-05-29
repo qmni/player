@@ -1,3 +1,5 @@
+// oxlint-disable no-magic-numbers
+// oxlint-disable sort-imports
 // Copyright (C) 2026 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -12,14 +14,11 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
-
 // https://medium.com/@tiffanyadisuryo/setting-up-a-prometheus-and-grafana-monitoring-system-for-my-bun-js-backend-243c4c3cd29d
-
 import { type Context, type Next } from 'hono';
 import { createMiddleware } from 'hono/factory';
 import { Counter, Histogram, collectDefaultMetrics } from 'prom-client';
 
-// Metriken für Prometheus mit Default-Daten konfigurieren
 collectDefaultMetrics();
 
 // Metrik: gesamte Anzahl an HTTP-Requests

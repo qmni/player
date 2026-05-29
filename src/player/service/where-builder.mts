@@ -1,8 +1,9 @@
+// oxlint-disable max-lines-per-function
+// oxlint-disable sort-imports
 /**
  * Das Modul besteht aus der Funktion {@linkcode buildWhere}.
  * @packageDocumentation
  */
-
 import { type PlayerClass, type PlayerStatus, Prisma } from '../../generated/prisma/client.ts';
 import { type PlayerWhereInput } from '../../generated/prisma/models/Player.ts';
 import { getLogger } from '../../logger/logger.mts';

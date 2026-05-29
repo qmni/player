@@ -1,8 +1,8 @@
+// oxlint-disable sort-imports
 /**
  * Das Modul besteht aus der Klasse {@linkcode PlayerService}.
  * @packageDocumentation
  */
-
 import { prismaClient } from '../../config/prisma-client.mts';
 import { type Prisma } from '../../generated/prisma/client.ts';
 import { type PlayerInclude } from '../../generated/prisma/models/Player.ts';

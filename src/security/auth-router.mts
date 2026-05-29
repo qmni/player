@@ -1,8 +1,9 @@
-import { Hono } from 'hono';
+// oxlint-disable sort-imports
+import { paths } from '../config/paths.mts';
+import { getLogger } from '../logger/logger.mts';
 import { createProblemDetails, unauthorized } from '../problem-details.mts';
 import { KeycloakService } from './keycloak-service.mts';
-import { getLogger } from '../logger/logger.mts';
-import { paths } from '../config/paths.mts';
+import { Hono } from 'hono';
 
 const logger = getLogger('auth-router', 'file');
 const keycloakService = new KeycloakService();

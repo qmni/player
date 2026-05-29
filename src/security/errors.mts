@@ -1,3 +1,4 @@
+// oxlint-disable max-classes-per-file
 /**
  * Error-Klasse fuer fehlende Authentifizierung.
  */

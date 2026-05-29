@@ -1,5 +1,6 @@
-import { describe, expect, test } from 'vitest';
+// oxlint-disable no-magic-numbers
 import { CONTENT_TYPE, IF_NONE_MATCH, restURL } from '../constants.mts';
+import { describe, expect, test } from 'vitest';
 
 const ids = [1, 20];
 const idNichtVorhanden = 999999;

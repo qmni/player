@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+// oxlint-disable no-underscore-dangle
+// oxlint-disable sort-imports
+import { join } from 'node:path';
 // Copyright (C) 2020 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -13,18 +16,14 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
 // Aufruf:   node scripts/asciidoctor.mts
-
 // https://github.com/asciidoctor/asciidoctor.js
 // https://asciidoctor-docs.netlify.com
 // https://asciidoctor.org
-
 import asciidoctor from '@asciidoctor/core';
 // https://github.com/eshepelyuk/asciidoctor-plantuml.js ist deprecated
 // @ts-expect-error keine .d.ts-Datei
 import kroki from 'asciidoctor-kroki';
-import { join } from 'node:path';
 import url from 'node:url';
 
 const adoc = asciidoctor();

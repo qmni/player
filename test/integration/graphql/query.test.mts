@@ -1,3 +1,7 @@
+// oxlint-disable max-lines
+// oxlint-disable max-lines-per-function
+// oxlint-disable no-magic-numbers
+// oxlint-disable sort-imports
 import { beforeAll, describe, expect, test } from 'vitest';
 import {
   type PlayerClass,

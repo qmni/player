@@ -1,10 +1,11 @@
-import { GraphQLError } from 'graphql';
+// oxlint-disable sort-imports
 import { container } from '../../container.mts';
 import { getLogger } from '../../logger/logger.mts';
-import { type PlayerMitGuild } from '../service/player-service.mts';
 import { NotFoundError } from '../service/errors.mts';
 import { createPageable } from '../service/pageable.mts';
+import { type PlayerMitGuild } from '../service/player-service.mts';
 import { type Slice } from '../service/slice.mts';
+import { GraphQLError } from 'graphql';
 import {
   type ID,
   type Player,

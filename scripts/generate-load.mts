@@ -1,4 +1,8 @@
 #!/usr/bin/env bun
+// oxlint-disable no-await-in-loop
+// oxlint-disable no-magic-numbers
+// oxlint-disable no-promise-executor-return
+// oxlint-disable promise/avoid-new
 // Copyright (C) 2024 - present, Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify

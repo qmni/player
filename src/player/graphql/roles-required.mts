@@ -1,8 +1,10 @@
+// oxlint-disable no-magic-numbers
+// oxlint-disable sort-imports
+import { keycloakConfig } from '../../config/keycloak.mts';
+import { getLogger } from '../../logger/logger.mts';
 import { GraphQLError } from 'graphql';
 import { type JWTPayload, createRemoteJWKSet, jwtVerify } from 'jose';
 import { JOSEError } from 'jose/errors';
-import { keycloakConfig } from '../../config/keycloak.mts';
-import { getLogger } from '../../logger/logger.mts';
 
 const { issuer, jwksUri, clientId, audience } = keycloakConfig;
 const jwks = createRemoteJWKSet(new URL(jwksUri));

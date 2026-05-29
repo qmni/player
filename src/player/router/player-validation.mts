@@ -1,3 +1,5 @@
+// oxlint-disable no-magic-numbers
+// oxlint-disable require-unicode-regexp
 import { z } from 'zod';
 
 export const MAX_PLAYER_LEVEL = 100;

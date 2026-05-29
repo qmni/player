@@ -1,3 +1,4 @@
+// oxlint-disable max-classes-per-file
 /**
  * Fehlerklassen für die Verwaltung von Playern.
  * @packageDocumentation

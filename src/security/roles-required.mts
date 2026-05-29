@@ -1,9 +1,11 @@
-import { type Context, type HonoRequest, type Next } from 'hono';
-import { createRemoteJWKSet, jwtVerify } from 'jose';
-import { JOSEError } from 'jose/errors';
+// oxlint-disable no-magic-numbers
+// oxlint-disable sort-imports
 import { keycloakConfig } from '../config/keycloak.mts';
 import { getLogger } from '../logger/logger.mts';
 import { ForbiddenError, InternalServerError, UnauthorizedError } from './errors.mts';
+import { type Context, type HonoRequest, type Next } from 'hono';
+import { createRemoteJWKSet, jwtVerify } from 'jose';
+import { JOSEError } from 'jose/errors';
 
 type Role = 'admin' | 'player';
 

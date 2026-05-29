@@ -1,3 +1,6 @@
+// oxlint-disable sort-imports
+import { config } from './app.mts';
+import { env } from './env.mts';
 // Copyright (C) 2016 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -12,13 +15,10 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
-
 import { resolve } from 'node:path';
 import { styleText } from 'node:util';
-import pino from 'pino';
 import { type PrettyOptions } from 'pino-pretty';
-import { config } from './app.mts';
-import { env } from './env.mts';
+import pino from 'pino';
 
 /**
  * Das Modul enthält die Konfiguration für den Logger.

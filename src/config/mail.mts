@@ -1,3 +1,5 @@
+// oxlint-disable no-magic-numbers
+// oxlint-disable sort-imports
 // Copyright (C) 2016 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -17,10 +19,9 @@
  * Das Modul enthält die Konfiguration für den Mail-Client mit _nodemailer_.
  * @packageDocumentation
  */
-
-import { type Options } from 'nodemailer/lib/smtp-transport/index.js';
 import { getLogger } from '../logger/logger.mts';
 import { config } from './app.mts';
+import { type Options } from 'nodemailer/lib/smtp-transport/index.js';
 
 const logger = getLogger('config/mail', 'file');
 const { mail } = config;
