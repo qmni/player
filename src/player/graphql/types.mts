@@ -307,12 +307,12 @@ export const toUpdate = (player: PlayerUpdateInput): PlayerUpdate => {
     } = player;
 
     const playerUpdate: PlayerUpdate = {
-        username,
-        email,
-        level,
-        experience,
-        playerClass,
-        status,
+        ...(username === undefined ? {} : { username }),
+        ...(email === undefined ? {} : { email }),
+        ...(level === undefined ? {} : { level }),
+        ...(experience === undefined ? {} : { experience }),
+        ...(playerClass === undefined ? {} : { playerClass }),
+        ...(status === undefined ? {} : { status }),
     };
 
     if (guildId !== undefined) {
