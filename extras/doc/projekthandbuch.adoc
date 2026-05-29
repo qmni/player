@@ -1,68 +1,142 @@
-= Projekthandbuch Player
+// Copyright (C) 2019 - present Juergen Zimmermann, Hochschule Karlsruhe
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+// Preview durch <Strg><Shift>v
+
+= Projekthandbuch
+Jürgen Zimmermann <Juergen.Zimmermann@h-ka.de>
+:doctype: book
+:toc: left
+:sectanchors:
+:sectlinks:
 :sectnums:
+:source-highlighter: highlight.js
+:icons: font
+// :kroki-server-url: https://kroki.io
 
-== Ziel
+// https://github.com/asciidoctor/asciidoctorj
+// https://github.com/asciidoctor/asciidoctor-diagram
+// http://de.plantuml.com/classes.html
+// http://de.plantuml.com/component.html
+// https://github.com/odrotbohm/asciidoctor-plantuml
 
-Der Appserver verwaltet MMORPG-Player und Guilds. Die Anwendung nutzt Bun,
-Hono, TypeScript, Prisma, PostgreSQL, Zod, GraphQL Yoga, Keycloak, Pino,
-Vitest, Bruno, Docker Compose und k6.
+IMPORTANT: Copyright (C) 2020 - present Jürgen Zimmermann, Hochschule Karlsruhe. +
+           Free use of this software is granted under the terms of the
+           GNU General Public License (GPL) v3. +
+           For the full text of the license, see the http://www.gnu.org/licenses/gpl-3.0.html[license] file.
 
-== Architektur
+== Der Applikationsserver
 
-Die Anwendung ist schichtweise aufgebaut:
+=== Der Applikationsserver im Überblick
 
-* `src/app.mts` registriert Middleware, REST-Routen, GraphQL und Error-Handling.
-* `src/player/router` enthält REST-Router und Zod-Validierung.
-* `src/player/service` enthält die Geschäftslogik und nutzt Prisma.
-* `src/player/graphql` enthält Schema, Query- und Mutation-Handler.
-* `src/security` prüft Tokens und Rollen aus Keycloak.
+Sed porttitor lectus nibh. Nulla porttitor accumsan tincidunt.
 
-== Datenmodell
 
-[plantuml,player-er-diagramm,svg]
+.Use Cases
+[plantuml,use-cases-player,svg]
 ----
-include::player-er-diagramm.plantuml[]
-----
-
-== Komponenten
-
-[plantuml,player-komponenten,svg]
-----
-include::player-komponenten.plantuml[]
+include::use-cases-player.plantuml[]
 ----
 
-== Use Cases
+Quisque velit nisi, pretium ut lacinia in, elementum id enim. Nulla porttitor
+accumsan tincidunt.
 
-[plantuml,player-use-cases,svg]
+.Komponentendiagramm
+[plantuml,komponenten-player,svg]
 ----
-include::player-use-cases.plantuml[]
-----
-
-== Sequenz
-
-[plantuml,player-sequenzdiagramm,svg]
-----
-include::player-sequenzdiagramm.plantuml[]
+include::komponenten-player.plantuml[]
 ----
 
-== Vorführung
+=== Die REST-Schnittstelle
 
-Typische Vorführschritte:
+Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia
+Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet
+ligula. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere
+cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit
+amet ligula.
 
-* `bun run tsc`
-* `bun run prettier:check`
-* `bun run eslint`
-* `bun vitest --project unit`
-* `docker compose -f extras/compose/player/compose.yml config`
-* Appserver mit Backend-Systemen starten
-* REST- und GraphQL-Requests in Bruno zeigen
-* Lasttest mit `bun run k6` starten
+.Router für Lesezugriffe an der REST-Schnittstelle
+[plantuml,player-router,svg]
+----
+include::player-router.plantuml[]
+----
 
-== Wichtige Konzepte
+Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Donec
+sollicitudin molestie malesuada.
 
-* REST nutzt Ressourcen, HTTP-Methoden, Statuscodes, `ETag` und `If-Match`.
-* Zod validiert eingehende DTOs, bevor sie an Prisma weitergereicht werden.
-* Prisma bildet Player und Guild auf PostgreSQL-Tabellen ab.
-* GraphQL Yoga bietet Query und Mutation als zweite API-Schicht.
-* Keycloak liefert Authentifizierung; Rollenprüfung entscheidet über Autorisierung.
-* k6 erzeugt Last auf REST- und GraphQL-Endpunkte.
+."Sequenzdiagramm" mit den Methodenaufrufen
+[plantuml,sequenzdiagramm-player,svg]
+----
+include::sequenzdiagramm-player.plantuml[]
+----
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+tempor invidunt ut.
+
+.Router für Schreibzugriffe an der REST-Schnittstelle
+[plantuml,player-write-router,svg]
+----
+include::player-write-router.plantuml[]
+----
+
+=== Die Geschäftslogik
+
+Donec rutrum congue leo eget malesuada. Donec rutrum congue leo eget malesuada.
+
+."PlayerService" von der Geschäftslogik
+[plantuml,PlayerService,svg]
+----
+include::PlayerService.plantuml[]
+----
+
+Pellentesque in ipsum id orci porta dapibus. Donec rutrum congue leo eget
+malesuada.
+
+."PlayerWriteService" von der Geschäftslogik
+[plantuml,PlayerWriteService,svg]
+----
+include::PlayerWriteService.plantuml[]
+----
+
+=== ER-Diagramm
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+.ER-Diagramm
+[plantuml,ER-Diagramm-Player,svg]
+----
+include::ER-Diagramm-Player.plantuml[]
+----
+
+== Programmierrichtlinien für TypeScript und JavaScript
+
+Für die Programmierung mit *TypeScript* und *JavaScript* sind folgende
+Styleguides empfehlenswert:
+
+[horizontal]
+_E-Book zu TypeScript_:: https://github.com/gibbok/typescript-book
+_Google_:: https://google.github.io/styleguide/tsguide.html
+_Airbnb_:: https://github.com/airbnb/javascript
+_Shopify_:: https://github.com/Shopify/javascript
+_React bei Airbnb_:: https://github.com/airbnb/javascript/tree/master/react
+_Angular_:: https://angular.io/docs/ts/latest/guide/style-guide.html
+_Microsoft_:: https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines
+
+Von IBM und Red Hat gibt es bei GitHub _Node.js Reference Architecture_
+https://github.com/nodeshift/nodejs-reference-architecture, wo alle möglichen
+Aspekte bei der Softwareentwicklung mit Node berücksichtigt sind und
+entsprechende Empfehlungen bzw. Best Practices beschrieben sind.
+Diese Dokumentation muss man einfach gelesen haben. Ebenfalls empfehlenswert
+ist https://github.com/goldbergyoni/nodebestpractices.
