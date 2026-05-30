@@ -1,3 +1,7 @@
-folder:
+info:
   name: Mutation admin
+  type: folder
   seq: 2
+
+request:
+  auth: inherit

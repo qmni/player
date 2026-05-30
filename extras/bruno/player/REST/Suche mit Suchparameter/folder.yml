@@ -1,3 +1,7 @@
-folder:
+info:
   name: Suche mit Suchparameter
+  type: folder
   seq: 2
+
+request:
+  auth: inherit

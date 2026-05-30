@@ -1,3 +1,7 @@
-folder:
+info:
   name: Neuanlegen Bearer Token
+  type: folder
   seq: 3
+
+request:
+  auth: inherit
