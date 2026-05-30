@@ -15,6 +15,7 @@ import { env } from './env.mts';
 //
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
+import { mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { styleText } from 'node:util';
 import { type PrettyOptions } from 'pino-pretty';
@@ -39,6 +40,7 @@ if (log?.dir !== undefined && typeof log.dir !== 'string') {
 const logDir: string | undefined =
   (log?.dir as string | undefined) === undefined ? undefined : log.dir.trimEnd();
 const logFile = logDir === undefined ? logFileDefault : resolve(logDir, logFileNameDefault);
+mkdirSync(logDir === undefined ? logDirDefault : resolve(logDir), { recursive: true });
 const pretty = log?.pretty === true;
 
 // https://getpino.io

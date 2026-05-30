@@ -8,6 +8,12 @@ on:
 jobs:
   quality:
     runs-on: ubuntu-latest
+    env:
+      NODE_ENV: test
+      LOG_LEVEL: info
+      CLIENT_SECRET: ci-placeholder
+      DATABASE_URL: postgresql://player:p@localhost:5432/player
+      DATABASE_URL_ADMIN: postgresql://player:p@localhost:5432/player
 
     steps:
       - name: Checkout

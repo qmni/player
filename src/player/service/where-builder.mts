@@ -40,7 +40,7 @@ export const buildWhere = (suchparameter: Suchparameter) => {
 
       case 'email':
         where.email = {
-          contains: value as string,
+          equals: value as string,
           mode: Prisma.QueryMode.insensitive,
         };
         break;

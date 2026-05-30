@@ -18,15 +18,13 @@
  * Das Modul enthält die Funktionalität, um die Test-DB neu zu laden.
  * @packageDocumentation
  */
-import { PrismaClient } from '../../generated/prisma/client.ts';
 import { getLogger } from '../../logger/logger.mts';
 import { config } from '../app.mts';
-import { adapter } from '../prisma-client.mts';
 import { resourcesURL } from '../resources.mts';
-import { PrismaPg } from '@prisma/adapter-pg';
 import { readFile } from 'node:fs/promises';
 import { URL } from 'node:url';
 import process from 'node:process';
+import { Client } from 'pg';
 
 /**
  * Die Test-DB wird im Development-Modus neu geladen, nachdem die Module
@@ -37,28 +35,7 @@ export class DbPopulateService {
 
   readonly #dbURL = new URL('postgresql/', resourcesURL);
 
-  readonly #prisma: PrismaClient;
-
-  readonly #prismaAdmin: PrismaClient;
-
   readonly #logger = getLogger(DbPopulateService.name);
-
-  /**
-   * Initialisierung durch DI mit `DataSource` für SQL-Queries.
-   */
-  constructor() {
-    // PrismaClient fuer die DB aus DATABASE_URL in ".env"
-    // aber OHNE Logging der Queries
-    this.#prisma = new PrismaClient({ adapter, errorFormat: 'pretty' });
-
-    const adapterAdmin = new PrismaPg({
-      connectionString: process.env['DATABASE_URL_ADMIN'],
-    });
-    this.#prismaAdmin = new PrismaClient({
-      adapter: adapterAdmin,
-      errorFormat: 'pretty',
-    });
-  }
 
   async populate() {
     if (!this.#dbPopulate) {
@@ -80,19 +57,23 @@ export class DbPopulateService {
     this.#logger.debug('copyScript = %s', copyScript);
     const copyStatements = await readFile(copyScript, 'utf8');
 
-    await this.#prisma.$connect();
-    await this.#prisma.$transaction(async (tx) => {
-      await tx.$executeRawUnsafe(dropStatements);
-      await tx.$executeRawUnsafe(createStatements);
+    const client = new Client({
+      connectionString: process.env['DATABASE_URL_ADMIN'],
     });
-    await this.#prisma.$disconnect();
 
-    // COPY zum Laden von CSV-Dateien erfordert Administrationsrechte
-    // https://www.postgresql.org/docs/current/sql-copy.html
-    await this.#prismaAdmin.$connect();
-    await this.#prismaAdmin.$transaction(async (tx) => {
-      await tx.$executeRawUnsafe(copyStatements);
-    });
-    await this.#prismaAdmin.$disconnect();
+    await client.connect();
+
+    try {
+      await client.query('BEGIN');
+      await client.query(dropStatements);
+      await client.query(createStatements);
+      await client.query(copyStatements);
+      await client.query('COMMIT');
+    } catch (err) {
+      await client.query('ROLLBACK');
+      throw err;
+    } finally {
+      await client.end();
+    }
   }
 }
