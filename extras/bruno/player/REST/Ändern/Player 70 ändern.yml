@@ -1,5 +1,5 @@
 info:
-  name: Player 40 ändern
+  name: Player 70 ändern
   type: http
   seq: 1
 
@@ -15,7 +15,7 @@ http:
       value: '"0"'
   params:
     - name: id
-      value: "40"
+      value: "70"
       type: path
   body:
     type: json

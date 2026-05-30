@@ -1,5 +1,5 @@
 info:
-  name: Player 60 löschen
+  name: Player 80 löschen
   type: graphql
   seq: 3
 
@@ -14,7 +14,7 @@ graphql:
   body:
     query: |-
       mutation {
-        delete(id: "60") {
+        delete(id: "80") {
           success
         }
       }

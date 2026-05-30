@@ -1,2 +1,3 @@
-name: Neuanlegen Bearer Token
-seq: 3
+folder:
+  name: Neuanlegen Bearer Token
+  seq: 3

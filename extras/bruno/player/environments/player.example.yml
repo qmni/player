@@ -9,12 +9,12 @@ variables:
     value: admin
   - secret: true
     name: password
-    value: CHANGE_ME
+    value: p
   - name: playerUsername
-    value: player
+    value: user
   - secret: true
     name: playerPassword
-    value: CHANGE_ME
+    value: p
   - secret: true
     name: accessToken
     value: PASTE_ACCESS_TOKEN_HERE
