@@ -1,14 +1,12 @@
 -- Aufruf: psql --dbname=player --username=player --file=/init/player/sql/copy-csv.sql
 
-SET search_path TO public;
-
-INSERT INTO guild (id, name, description, "foundedAt", version)
+INSERT INTO player.guild (id, name, description, "foundedAt", version)
 VALUES
   (10, 'Warriors', 'Eine Guild', CURRENT_TIMESTAMP, 0),
   (20, 'Mages', 'Magische Guild', CURRENT_TIMESTAMP, 0),
   (30, 'Hunters', 'Jaeger Guild', CURRENT_TIMESTAMP, 0);
 
-INSERT INTO player (
+INSERT INTO player.player (
   id,
   username,
   email,
@@ -31,5 +29,12 @@ VALUES
   (70, 'updateTarget', 'update-target@example.com', 70, 5500, 'PRIEST', 'ACTIVE', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
   (80, 'bannedTarget', 'banned-target@example.com', 80, 6500, 'HUNTER', 'BANNED', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);
 
-SELECT setval(pg_get_serial_sequence('guild', 'id'), (SELECT max(id) FROM guild));
-SELECT setval(pg_get_serial_sequence('player', 'id'), (SELECT max(id) FROM player));
+SELECT setval(
+  pg_get_serial_sequence('player.guild', 'id'),
+  (SELECT max(id) FROM player.guild)
+);
+
+SELECT setval(
+  pg_get_serial_sequence('player.player', 'id'),
+  (SELECT max(id) FROM player.player)
+);
