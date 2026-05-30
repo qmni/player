@@ -1,4 +1,9 @@
 -- Bestehende Tabellen und Typen löschen (nur für Entwicklung/Neuaufbau!)
+
+-- Eigenes Schema anlegen und verwenden
+CREATE SCHEMA IF NOT EXISTS player;
+SET search_path TO player;
+
 DROP TABLE IF EXISTS player CASCADE;
 DROP TABLE IF EXISTS guild CASCADE;
 DROP TYPE IF EXISTS "PlayerStatus" CASCADE;
@@ -6,19 +11,28 @@ DROP TYPE IF EXISTS "PlayerClass" CASCADE;
 
 -- Aufruf: psql --dbname=player --username=player --file=/init/player/sql/create-table.sql
 
-SET search_path TO player;
-
-
 DO $$
 BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'PlayerStatus') THEN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_type t
+    JOIN pg_namespace n ON n.oid = t.typnamespace
+    WHERE t.typname = 'PlayerStatus'
+      AND n.nspname = 'player'
+  ) THEN
     CREATE TYPE "PlayerStatus" AS ENUM ('ACTIVE', 'BANNED', 'DELETED');
   END IF;
 END$$;
 
 DO $$
 BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'PlayerClass') THEN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_type t
+    JOIN pg_namespace n ON n.oid = t.typnamespace
+    WHERE t.typname = 'PlayerClass'
+      AND n.nspname = 'player'
+  ) THEN
     CREATE TYPE "PlayerClass" AS ENUM ('WARRIOR', 'MAGE', 'ROGUE', 'PRIEST', 'HUNTER');
   END IF;
 END$$;
