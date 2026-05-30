@@ -1,8 +1,6 @@
 -- Bestehende Tabellen und Typen löschen (nur für Entwicklung/Neuaufbau!)
 
--- Eigenes Schema anlegen und verwenden
-CREATE SCHEMA IF NOT EXISTS player;
-SET search_path TO player;
+SET search_path TO public;
 
 DROP TABLE IF EXISTS player CASCADE;
 DROP TABLE IF EXISTS guild CASCADE;
@@ -18,7 +16,7 @@ BEGIN
     FROM pg_type t
     JOIN pg_namespace n ON n.oid = t.typnamespace
     WHERE t.typname = 'PlayerStatus'
-      AND n.nspname = 'player'
+      AND n.nspname = 'public'
   ) THEN
     CREATE TYPE "PlayerStatus" AS ENUM ('ACTIVE', 'BANNED', 'DELETED');
   END IF;
@@ -31,7 +29,7 @@ BEGIN
     FROM pg_type t
     JOIN pg_namespace n ON n.oid = t.typnamespace
     WHERE t.typname = 'PlayerClass'
-      AND n.nspname = 'player'
+      AND n.nspname = 'public'
   ) THEN
     CREATE TYPE "PlayerClass" AS ENUM ('WARRIOR', 'MAGE', 'ROGUE', 'PRIEST', 'HUNTER');
   END IF;
