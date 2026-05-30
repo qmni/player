@@ -2,6 +2,9 @@
 // npm install --save-dev prisma
 import 'dotenv/config';
 import { defineConfig, env } from 'prisma/config';
+import { config as loadEnv } from 'dotenv';
+
+loadEnv();
 
 // oxlint-disable-next-line import/no-default-export
 export default defineConfig({

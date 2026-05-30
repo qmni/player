@@ -39,7 +39,7 @@
     "asciidoctor": "node scripts/asciidoctor.mts",
     "dev": "bun --watch src/index.mts",
     "hello": "bun --watch src/index-hello.mts",
-    "k6": "k6 run test\\lasttest\\script.ts",
+    "k6": "k6 run test/lasttest/script.ts",
     "leasot": "leasot --exit-nicely src/**/*.mts",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",

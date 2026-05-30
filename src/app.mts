@@ -10,12 +10,15 @@ import { secureHeaders } from 'hono/secure-headers';
 import { type ZodError } from 'zod';
 import { router as healthRouter } from './admin/health-router.mts';
 import { corsOptions } from './config/cors.mts';
+import { router as devRouter } from './config/dev/dev-router.mts';
+import { env } from './config/env.mts';
 import { paths } from './config/paths.mts';
 import { getLogger } from './logger/logger.mts';
 import { requestLogger } from './logger/request-logger.mts';
 import { responseTime } from './logger/response-time.mts';
 import { trackMetrics } from './monitoring/prometheus-metrics.mts';
 import { router as prometheusRouter } from './monitoring/prometheus-router.mts';
+import { graphqlApp } from './player/graphql/graphql-app.mts';
 import { createPlayerRoutes } from './player/router/player-routes.mts';
 import {
   EmailExistsError,
@@ -40,6 +43,7 @@ import { ForbiddenError, UnauthorizedError } from './security/errors.mts';
 export const app = new Hono();
 
 const logger = getLogger('app', 'file');
+const { NODE_ENV } = env;
 
 // Globale Middleware muss vor den Routen registriert werden.
 const securityHeaders = createMiddleware(async (c: Context, next: Next) => {
@@ -59,6 +63,11 @@ app.route(`${paths.rest}/player`, createPlayerRoutes());
 app.route(paths.health, healthRouter);
 app.route(paths.auth, authRouter);
 app.route('/prometheus', prometheusRouter);
+app.route('/', graphqlApp);
+
+if (NODE_ENV === 'development' || NODE_ENV === 'test') {
+  app.route(paths.dev, devRouter);
+}
 
 if (logger.isLevelEnabled('debug')) {
   showRoutes(app, { verbose: true });
