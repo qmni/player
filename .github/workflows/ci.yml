@@ -30,6 +30,9 @@ jobs:
       - name: Validate Prisma schema
         run: bunx prisma validate --schema prisma/schema.prisma
 
+      - name: Generate Prisma client
+        run: bunx prisma generate --schema prisma/schema.prisma
+
       - name: Check formatting
         run: bun run fmt:check
 
