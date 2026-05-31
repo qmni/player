@@ -7,8 +7,6 @@ graphql:
   method: POST
   url: "{{graphqlUrl}}"
   headers:
-    - name: Authorization
-      value: Bearer {{accessToken}}
     - name: Accept
       value: application/graphql-response+json
   body:

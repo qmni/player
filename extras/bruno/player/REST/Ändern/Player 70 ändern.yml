@@ -7,8 +7,6 @@ http:
   method: PUT
   url: "{{restUrl}}/:id"
   headers:
-    - name: Authorization
-      value: Bearer {{accessToken}}
     - name: Content-Type
       value: application/json
     - name: If-Match

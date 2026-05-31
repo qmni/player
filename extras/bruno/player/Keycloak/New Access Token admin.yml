@@ -5,20 +5,14 @@ info:
 
 http:
   method: POST
-  url: "{{oidcTokenUrl}}"
+  url: "{{tokenUrl}}"
   body:
     type: form-urlencoded
     data:
-      - name: grant_type
-        value: password
       - name: username
-        value: "{{username}}"
+        value: admin
       - name: password
-        value: "{{password}}"
-      - name: client_id
-        value: "{{clientId}}"
-      - name: client_secret
-        value: "{{clientSecret}}"
+        value: p
 
 runtime:
   assertions:

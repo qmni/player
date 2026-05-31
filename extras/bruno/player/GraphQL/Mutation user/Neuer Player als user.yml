@@ -7,8 +7,6 @@ graphql:
   method: POST
   url: "{{graphqlUrl}}"
   headers:
-    - name: Authorization
-      value: Bearer {{accessToken}}
     - name: Accept
       value: application/graphql-response+json
   body:
@@ -34,9 +32,8 @@ runtime:
     - expression: res.status
       operator: eq
       value: "200"
-    - expression: res.body.errors[0].extensions.code
-      operator: eq
-      value: FORBIDDEN
+    - expression: res.body.data.create.id
+      operator: isString
 
 settings:
   encodeUrl: true

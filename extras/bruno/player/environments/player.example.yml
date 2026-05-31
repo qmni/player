@@ -1,5 +1,19 @@
 name: player.example
 variables:
+  - name: baseUrl
+    value: https://localhost:3000
+  - name: keycloakUrl
+    value: http://localhost:8880
+  - name: realm
+    value: javascript
+  - name: realmUrl
+    value: "{{keycloakUrl}}/realms/{{realm}}"
+  - name: oidcUrl
+    value: "{{realmUrl}}/protocol/openid-connect"
+  - name: oidcTokenUrl
+    value: "{{oidcUrl}}/token"
+  - name: tokenUrl
+    value: "{{baseUrl}}/auth/token"
   - name: clientId
     value: javascript-client
   - secret: true

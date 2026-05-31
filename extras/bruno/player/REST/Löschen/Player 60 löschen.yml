@@ -6,9 +6,6 @@ info:
 http:
   method: DELETE
   url: "{{restUrl}}/:id"
-  headers:
-    - name: Authorization
-      value: Bearer {{accessToken}}
   params:
     - name: id
       value: "60"

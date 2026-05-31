@@ -23,6 +23,20 @@ request:
       value: "{{oidcUrl}}/auth"
     - name: oidcTokenUrl
       value: "{{oidcUrl}}/token"
+    - name: tokenUrl
+      value: "{{baseUrl}}/auth/token"
+    - name: clientId
+      value: javascript-client
+    - name: clientSecret
+      value: 0oSEd7oLFb3NBUywGhPmyLksV29RWCfS
+    - name: username
+      value: admin
+    - name: password
+      value: p
+    - name: playerUsername
+      value: user
+    - name: playerPassword
+      value: p
 
 bundled: false
 
