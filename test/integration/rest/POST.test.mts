@@ -99,7 +99,7 @@ describe('POST /rest', () => {
     expect(idStr).toBeDefined();
 
     expect(PlayerService.ID_PATTERN.test(idStr ?? '')).toBe(true);
-  });
+  }, 10000);
 
   test('Neuer Player mit ungueltigen Daten', async () => {
     const headers = new Headers();

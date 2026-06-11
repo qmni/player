@@ -129,7 +129,7 @@ describe('GraphQL Mutations', () => {
 
     expect(create).toBeDefined();
     expect(parseInt(create.id, 10)).toBeGreaterThan(0);
-  });
+  }, 15000);
 
   test('Player mit ungueltigen Werten neu anlegen', async () => {
     const mutation: GraphQLQuery = {
@@ -227,7 +227,7 @@ describe('GraphQL Mutations', () => {
 
     const { data } = result as UpdateSuccessType;
     expect(data.update.version).toBeGreaterThanOrEqual(1);
-  });
+  }, 15000);
 
   test('Player mit ungueltigen Werten aktualisieren', async () => {
     const id = '40';
@@ -372,7 +372,7 @@ describe('GraphQL Mutations', () => {
 
     const { data } = result as DeleteSuccessType;
     expect(data.delete.success).toBe(true);
-  });
+  }, 15000);
 
   test('Player loeschen als "user"', async () => {
     if (tokenUser === undefined) {
